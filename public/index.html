@@ -776,7 +776,7 @@ function renderFaq(){
 }
 function renderCol(){
  const c=COL[0];
- $("#colMain").innerHTML=`<p class="col-meta">${lang==="tr"?"Sayı":"No."} ${c.n} · ${lang==="tr"?c.d:c.dEn} · ${c.min} ${lang==="tr"?"dk":"min"}</p><h3>${lang==="tr"?c.t:c.te}</h3><p>${(lang==="tr"?c.p:c.pe)[0]}</p><p style="color:var(--muted);font-size:14px">${c.ref}</p><button class="btn btn-ghost" data-col="0" style="justify-self:start;color:var(--fg)">${lang==="tr"?"Yazının tamamı":"Read the full column"}</button>`;
+ $("#colMain").innerHTML=`<p class="col-meta">${lang==="tr"?"Sayı":"No."} ${c.n} · ${lang==="tr"?c.d:c.dEn} · ${c.min} ${lang==="tr"?"dk":"min"}</p><h3>${lang==="tr"?c.t:c.te}</h3><p>${(lang==="tr"?c.p:c.pe)[0]}</p><p style="color:var(--muted);font-size:14px">${c.ref}</p><button class="btn btn-sun" data-col="0" style="justify-self:start">${lang==="tr"?"Yazının tamamı":"Read the full column"}</button>`;
  $("#colSide").innerHTML=`<div class="col-list">`+COL.slice(1).map((c,i)=>`<button class="sitem" data-col="${i+1}" style="all:unset;display:block;cursor:pointer;padding:10px 0;border-bottom:1px solid var(--line)"><b>${c.d.split(" ")[0].padStart(2,"0")}.${({Ekim:"10",Kasım:"11"})[c.d.split(" ")[1]]} · </b><b>${lang==="tr"?c.t:c.te}</b><br><span style="color:var(--muted);font-size:13px">${c.ref} · ${c.min} ${lang==="tr"?"dk":"min"}</span></button>`).join("")+`</div>`;
 }
 let curCol=0;
