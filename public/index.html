@@ -505,7 +505,7 @@ footer img{width:40px}
       <div class="col-side"><div id="colSide"></div>
         <form class="nl" id="nl"><label for="nlMail"><b><span data-l="tr">Yazıyı e-postanıza alın</span><span data-l="en">Get the column by email</span></b></label>
           <div class="nl-row"><input id="nlMail" type="email" required placeholder="ornek@eposta.com"><select id="nlLang" aria-label="Language"><option>TR</option><option>EN</option></select><button class="btn btn-sun" style="padding:9px 16px"><span data-l="tr">Abone ol</span><span data-l="en">Subscribe</span></button></div>
-          <p class="ok" id="nlOk" hidden><span data-l="tr">Başvurunuz alındı, teşekkürler.</span><span data-l="en">Your request was received, thank you.</span></p></form>
+          <p class="ok" id="nlOk" hidden><span data-l="tr">Teşekkürler! Onay için e-postanıza bir bağlantı gönderdik.</span><span data-l="en">Thank you! We sent a confirmation link to your email.</span></p></form>
 
       </div>
     </div>
@@ -816,8 +816,11 @@ function showPop(el){
 }
 function route(){const v=location.hash==="#ibadet";document.querySelectorAll("section.band,section.hero").forEach(s=>{s.hidden=v?s.id!=="ibadet":s.id==="ibadet"});if(v)scrollTo(0,0)}
 addEventListener("hashchange",()=>{const was=!$("#ibadet").hidden;route();if(was&&location.hash&&location.hash!=="#ibadet"){const t=document.querySelector(location.hash);t&&t.scrollIntoView()}});route();
-$("#nl").addEventListener("submit",async e=>{e.preventDefault();const f=e.target;
- try{await sendMail({_subject:"[Web] Bülten aboneliği",Eposta:$("#nlMail").value,Dil:$("#nlLang").value});$("#nlOk").hidden=false;f.reset()}catch(x){alert(lang==="tr"?"Gönderilemedi, lütfen tekrar deneyin.":"Could not send, please try again.")}});
+$("#nl").addEventListener("submit",async e=>{e.preventDefault();const f=e.target,btn=f.querySelector("button");btn.disabled=true;
+ try{const body=new URLSearchParams({email:$("#nlMail").value,tag:$("#nlLang").value.toLowerCase(),embed:"1"});
+  await fetch("https://buttondown.com/api/emails/embed-subscribe/uluslaraisik",{method:"POST",mode:"no-cors",body});
+  $("#nlOk").hidden=false;f.reset()}catch(x){alert(lang==="tr"?"Gönderilemedi, lütfen tekrar deneyin.":"Could not send, please try again.")}
+ btn.disabled=false});
 const MAILTO="https://formsubmit.co/ajax/uluslaraisik@gmail.com";
 async function sendMail(data){const r=await fetch(MAILTO,{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({_captcha:"false",_template:"table",...data})});const j=await r.json().catch(()=>({}));if(!r.ok||j.success==="false")throw new Error("fail")}
 $("#prayer").addEventListener("submit",async e=>{e.preventDefault();const f=e.target,btn=f.querySelector("button[type=submit]");
