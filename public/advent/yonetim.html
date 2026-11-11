@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Işık Işık 관리</title>
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:#070B1D;color:#EEF1FA;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:760px;margin:0 auto;padding:24px 16px 60px}
+h1{font-size:22px;margin:0 0 4px}
+p{color:#A3ACCB;margin:0 0 16px;font-size:14px}
+form{display:flex;gap:8px;flex-wrap:wrap}
+input,button{font:inherit;color:inherit;border-radius:10px;border:1px solid #2A3460;background:#141B3A;padding:10px 14px}
+input{flex:1;min-width:180px}
+button{cursor:pointer;font-weight:600}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:20px 0 10px;font-size:14px;color:#A3ACCB}
+ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+li{display:flex;gap:12px;align-items:center;justify-content:space-between;background:#141B3A;border:1px solid #2A3460;border-radius:12px;padding:10px 14px}
+li.h{opacity:.5}
+li q{display:block;font-size:17px}
+li small{color:#A3ACCB}
+li button{flex:0 0 auto;padding:6px 14px;font-size:14px}
+.err{color:#FF9A9A}
+</style>
+</head>
+<body>
+<main>
+  <h1>Işık Işık 관리</h1>
+  <p>공개된 한 줄을 확인하고, 문제가 있는 글은 숨길 수 있습니다. 숨긴 글은 밤하늘과 개수에서 빠지며 다시 보이게 할 수 있습니다.</p>
+  <form id="f"><input type="password" id="key" placeholder="관리 비밀번호" autocomplete="current-password" aria-label="관리 비밀번호"><button>열기</button></form>
+  <p class="err" id="err" hidden></p>
+  <div class="bar" id="bar" hidden><span id="sum"></span><label><input type="checkbox" id="onlyh" style="flex:none;min-width:0"> 숨긴 글만 보기</label></div>
+  <ul id="list"></ul>
+</main>
+<script>
+const $=s=>document.querySelector(s);let key="",rows=[];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const call=(b)=>fetch("/api/isik/admin",{method:b?"POST":"GET",headers:{authorization:"Bearer "+key,"content-type":"application/json"},body:b?JSON.stringify(b):undefined});
+function draw(){const oh=$("#onlyh").checked;
+  $("#list").innerHTML=rows.filter(r=>!oh||r.h).map(r=>`<li class="${r.h?"h":""}"><div><q>${esc(r.t)}</q><small>${r.d} · Amin ${r.a} · ${new Date(r.c).toLocaleString("ko-KR",{timeZone:"Europe/Istanbul"})}</small></div><button data-id="${r.id}">${r.h?"다시 보이기":"숨기기"}</button></li>`).join("");
+  $("#list").querySelectorAll("button").forEach(b=>b.onclick=async()=>{const r=rows.find(x=>x.id==b.dataset.id);b.disabled=true;const res=await call({id:r.id,h:r.h?0:1});if(res.ok){r.h=r.h?0:1}draw()});}
+async function load(){const e=$("#err");e.hidden=true;
+  try{const r=await call();const j=await r.json();
+    if(r.status===401){e.textContent="비밀번호가 맞지 않습니다.";e.hidden=false;return}
+    if(!r.ok){e.textContent="열 수 없습니다: "+(j.err||r.status);e.hidden=false;return}
+    rows=j.rows;$("#bar").hidden=false;$("#sum").textContent=`전체 불빛 ${j.n}개, 공개된 글 ${rows.length}개 (최근 1000개까지 표시)`;draw()}
+  catch(x){e.textContent="연결할 수 없습니다.";e.hidden=false}}
+$("#f").onsubmit=ev=>{ev.preventDefault();key=$("#key").value;load()};
+$("#onlyh").onchange=draw;
+</script>
+</body>
+</html>
