@@ -918,10 +918,8 @@ async function shareCol(kind,btn){const c=COL[curCol],tr=lang==="tr",T=tr?c.t:c.
   const k=kind==="ig-story"?"story":"feed",o=prep(c),f=o[k]||await o[k+"P"];
   if(!MOB){dl(f);window.open("https://www.instagram.com/","_blank","noopener");flash(btn,tr?"Görsel indirildi":"Image downloaded");
    shNote(tr?"Görsel indirildi ve Instagram açıldı. Instagram'da “+ Oluştur” ile indirilen görseli seçin. Hikâye paylaşımı bilgisayardan yapılamaz; telefonda doğrudan açılır.":"The image was downloaded and Instagram opened. In Instagram choose “+ Create” and pick the downloaded image. Stories can't be posted from a computer; on a phone this opens directly.");return}
-  if(k==="story"){let ok=false;try{await navigator.clipboard.write([new ClipboardItem({"image/png":f})]);ok=true}catch(e){}
-   if(ok){shMenu(false);openApp("instagram://story-camera",null);setTimeout(()=>shNote(tr?"Görsel kopyalandı. Instagram Hikâye ekranında metin (Aa) alanına basılı tutup “Yapıştır”ı seçin.":"Image copied. In the Instagram Story screen, long-press the text (Aa) area and choose “Paste”."),300);return}}
   if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});shMenu(false);return}
-  dl(f);flash(btn,tr?"Görsel kaydedildi":"Image saved");openApp("instagram://camera",null)}
+  dl(f);flash(btn,tr?"Görsel kaydedildi":"Image saved")}
  catch(e){if(e&&e.name==="NotAllowedError")shNote(tr?"Lütfen tekrar dokunun.":"Please tap again.")}}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-sh]");if(b)shareCol(b.dataset.sh,b)});
 function openQA(i){const x=QA[i];
