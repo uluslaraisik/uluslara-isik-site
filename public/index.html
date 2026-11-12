@@ -110,7 +110,7 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;backgroun
 #pop{position:fixed;z-index:60;max-width:min(380px,calc(100vw - 32px));background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:12px;box-shadow:0 18px 50px #0b0f2040;padding:16px 18px 14px}
 #pop .pr{font:500 12px var(--f-mono);color:var(--sun)}
 #pop p{margin-top:6px;font-size:15.5px;line-height:1.55}
-#pop small{display:block;margin-top:10px;color:var(--muted);font-size:11.5px}
+#pop #popSrc{display:block;margin-top:10px;color:var(--sky,#1C84DE);font-size:12.5px;font-weight:600;text-decoration:none}#pop #popSrc:hover{text-decoration:underline}
 
 /* visit */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
@@ -428,7 +428,7 @@ footer img{width:40px}
     <div>
       <p class="eyebrow" style="color:var(--sun-2)"><span data-l="tr">Antalya Uluslara Işık Kilisesi</span><span data-l="en">Antalya Light to the Nations Church</span></p>
       <h1 style="margin-top:14px"><span data-l="tr">Uluslara ışık,<br><em>Antalya'da.</em></span><span data-l="en">A light to the nations,<br><em>in Antalya.</em></span></h1>
-      <p class="verse"><span data-l="tr">“Seni uluslara ışık yapacağım ki, kurtarışım dünyanın dört bucağına ulaşsın.”</span><span data-l="en">“I will also give you as a light to the nations, that you may be my salvation to the end of the earth.”</span> <button class="ref" data-v="isa49">Yeşaya 49:6</button></p>
+      <p class="verse"><span data-l="tr">“Seni uluslara ışık yapacağım. Öyle ki, kurtarışım yeryüzünün dört bucağına ulaşsın.”</span><span data-l="en">“I will also give you as a light to the nations, that you may be my salvation to the end of the earth.”</span> <button class="ref" data-v="isa49">Yeşaya 49:6</button></p>
       <div class="cta-row">
         <a class="btn btn-sun" href="#ibadet"><span data-l="tr">İbadet saatleri ve konum</span><span data-l="en">Service times &amp; location</span></a>
         <a class="btn btn-ghost" href="https://www.kutsalkitap.com" target="_blank" rel="noopener"><span data-l="tr">Kutsal Kitap'ı birlikte okuyalım</span><span data-l="en">Read the Bible with us</span></a>
@@ -624,7 +624,7 @@ footer img{width:40px}
   </div>
 </footer>
 
-<div id="pop" hidden role="dialog" aria-modal="false"><div class="pr" id="popRef"></div><p id="popTxt"></p><small id="popSrc"></small></div>
+<div id="pop" hidden role="dialog" aria-modal="false"><div class="pr" id="popRef"></div><p id="popTxt"></p><a id="popSrc" target="_blank" rel="noopener noreferrer"></a></div>
 
 <div id="reader" hidden role="dialog" aria-modal="true" aria-labelledby="rTitle">
   <article class="rbox"><button type="button" class="jx" id="rClose" aria-label="Close">×</button><div id="rBody"></div></article>
@@ -650,19 +650,19 @@ footer img{width:40px}
 
 <script>
 const V={
- isa49:{r:"Yeşaya 49:6",tr:"Seni uluslara ışık yapacağım ki, kurtarışım dünyanın dört bucağına ulaşsın.",en:"I will also give you as a light to the nations, that you may be my salvation to the end of the earth."},
- mat514:{r:"Matta 5:14",tr:"Siz dünyanın ışığısınız. Tepeye kurulan kent gizlenemez.",en:"You are the light of the world. A city located on a hill can't be hidden."},
- mar117:{r:"Markos 1:17",tr:"İsa onlara, «Ardımdan gelin» dedi, «Sizleri insan tutan balıkçılar yapacağım.»",en:"Jesus said to them, “Come after me, and I will make you into fishers for men.”"},
- mar829:{r:"Markos 8:29",tr:"O da onlara, «Siz ne dersiniz, sizce ben kimim?» diye sordu. Petrus, «Sen Mesih'sin» yanıtını verdi.",en:"He said to them, “But who do you say that I am?” Peter answered, “You are the Christ.”"},
- yu114:{r:"Yuhanna 1:14",tr:"Söz insan olup aramızda yaşadı. O'nun yüceliğini, Baba'dan gelen, lütuf ve gerçekle dolu biricik Oğul'un yüceliğini gördük.",en:"The Word became flesh, and lived among us. We saw his glory, such glory as of the only born Son of the Father, full of grace and truth."},
+ isa49:{r:"Yeşaya 49:6",tr:"Seni uluslara ışık yapacağım. Öyle ki, kurtarışım yeryüzünün dört bucağına ulaşsın.",en:"I will also give you as a light to the nations, that you may be my salvation to the end of the earth."},
+ mat514:{r:"Matta 5:14",tr:"Dünyanın ışığı sizsiniz. Tepeye kurulan kent gizlenemez.",en:"You are the light of the world. A city located on a hill can't be hidden."},
+ mar117:{r:"Markos 1:17",tr:"İsa onlara, “Ardımdan gelin” dedi, “Sizleri insan tutan balıkçılar yapacağım.”",en:"Jesus said to them, “Come after me, and I will make you into fishers for men.”"},
+ mar829:{r:"Markos 8:29",tr:"O da onlara, “Siz ne dersiniz, sizce ben kimim?” diye sordu. Petrus, “Sen Mesih'sin” yanıtını verdi.",en:"He said to them, “But who do you say that I am?” Peter answered, “You are the Christ.”"},
+ yu114:{r:"Yuhanna 1:14",tr:"Söz, insan olup aramızda yaşadı. O'nun yüceliğini –Baba'dan gelen, lütuf ve gerçekle dolu biricik Oğul'un yüceliğini– gördük.",en:"The Word became flesh, and lived among us. We saw his glory, such glory as of the only born Son of the Father, full of grace and truth."},
  yu316:{r:"Yuhanna 3:16",tr:"Çünkü Tanrı dünyayı o kadar çok sevdi ki, biricik Oğlu'nu verdi. Öyle ki, O'na iman edenlerin hiçbiri mahvolmasın, hepsi sonsuz yaşama kavuşsun.",en:"For God so loved the world, that he gave his only born Son, that whoever believes in him should not perish, but have eternal life."},
- kol26:{r:"Koloseliler 2:6–7",tr:"Rab Mesih İsa'yı nasıl kabul ettinizse, O'nda öylece yaşayın. Şükranla dolup taşarak O'nda köklenin ve gelişin.",en:"As therefore you received Christ Jesus the Lord, walk in him, rooted and built up in him… abounding in it in thanksgiving."},
- mat2819:{r:"Matta 28:19–20",tr:"Bu nedenle gidin, bütün ulusları öğrencilerim olarak yetiştirin; onları Baba, Oğul ve Kutsal Ruh'un adıyla vaftiz edin; size buyurduğum her şeye uymayı onlara öğretin.",en:"Go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit, teaching them to observe all things that I commanded you."},
+ kol26:{r:"Koloseliler 2:6–7",tr:"Bu nedenle Rab Mesih İsa'yı nasıl kabul ettinizse, O'nda öylece yaşayın. Şükranla dolup taşarak O'nda köklenin ve gelişin, size öğretildiği gibi imanda güçlenin.",en:"As therefore you received Christ Jesus the Lord, walk in him, rooted and built up in him… abounding in it in thanksgiving."},
+ mat2819:{r:"Matta 28:19–20",tr:"Bu nedenle gidin, bütün ulusları öğrencilerim olarak yetiştirin; onları Baba, Oğul ve Kutsal Ruh'un adıyla vaftiz edin; size buyurduğum her şeye uymayı onlara öğretin. İşte ben, dünyanın sonuna dek her an sizinle birlikteyim.",en:"Go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit, teaching them to observe all things that I commanded you."},
  yar127:{r:"Yaratılış 1:27",tr:"Tanrı insanı kendi suretinde yarattı, onu Tanrı'nın suretinde yarattı. Onları erkek ve dişi olarak yarattı.",en:"God created man in his own image. In God's image he created him; male and female he created them."},
- mez139:{r:"Mezmur 139:1",tr:"Ya RAB, beni yoklayıp tanıdın.",en:"Yahweh, you have searched me, and you know me."},
- yar123:{r:"Yaratılış 12:3",tr:"Yeryüzündeki bütün halklar senin aracılığınla kutsanacak.",en:"All of the families of the earth will be blessed in you."},
- yak122:{r:"Yakup 1:22",tr:"Sözü yalnız duymakla kalmayın, sözü uygulayan kişiler olun. Yoksa kendinizi aldatmış olursunuz.",en:"But be doers of the word, and not only hearers, deluding your own selves."},
- luk1813:{r:"Luka 18:13",tr:"Vergi görevlisi ise uzakta durdu, gözlerini göğe kaldırmaya bile cesaret edemedi. Göğsünü döverek, «Tanrım, ben günahkâra merhamet et!» dedi.",en:"But the tax collector, standing far away, wouldn't even lift up his eyes to heaven, but beat his breast, saying, “God, be merciful to me, a sinner!”"}
+ mez139:{r:"Mezmur 139:1",tr:"Ya RAB, sınayıp tanıdın beni.",en:"Yahweh, you have searched me, and you know me."},
+ yar123:{r:"Yaratılış 12:3",tr:"Yeryüzündeki bütün halklar Senin aracılığınla kutsanacak.",en:"All of the families of the earth will be blessed in you."},
+ yak122:{r:"Yakup 1:22",tr:"Tanrı sözünü yalnız duymakla kalmayın, sözün uygulayıcıları da olun. Yoksa kendinizi aldatmış olursunuz.",en:"But be doers of the word, and not only hearers, deluding your own selves."},
+ luk1813:{r:"Luka 18:13",tr:"Vergi görevlisi ise uzakta durdu, gözlerini göğe kaldırmak bile istemiyordu, ancak göğsünü döverek, ‘Tanrım, ben günahkâra merhamet et’ diyordu.",en:"But the tax collector, standing far away, wouldn't even lift up his eyes to heaven, but beat his breast, saying, “God, be merciful to me, a sinner!”"}
 };
 const STAGES=[
  {id:"merak",tr:["Merak","Sorularla başlayın"],en:["Seek","Start with questions"]},
@@ -946,10 +946,13 @@ document.addEventListener("click",e=>{
  if(!e.target.closest("#pop")) $("#pop").hidden=true;
 });
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("#pop").hidden=true}});
+const BK={"Yaratılış":"GEN","Çıkış":"EXO","Mezmur":"PSA","Mezmurlar":"PSA","Yeşaya":"ISA","Mika":"MIC","Sefanya":"ZEP","Daniel":"DAN","Matta":"MAT","Markos":"MRK","Luka":"LUK","Yuhanna":"JHN","Elçilerin İşleri":"ACT","Romalılar":"ROM","Galatyalılar":"GAL","Efesliler":"EPH","Filipililer":"PHP","Koloseliler":"COL","İbraniler":"HEB","Yakup":"JAS","1 Yuhanna":"1JN","1 Petrus":"1PE","1 Korintliler":"1CO","2 Korintliler":"2CO"};
+function bibleUrl(r){const m=r.match(/^(.+?)\s+(\d+):(\d+)(?:[–-](\d+))?/);if(!m)return "https://www.bible.com/bible/170/";const b=BK[m[1]]||"",tr=lang==="tr";
+ return "https://www.bible.com/bible/"+(tr?"170":"206")+"/"+b+"."+m[2]+(tr?".TCL02":".WEB")}
 function showPop(el){
  const v=V[el.dataset.v],pop=$("#pop");
  $("#popRef").textContent=v.r;$("#popTxt").textContent=lang==="tr"?v.tr:v.en;
- $("#popSrc").textContent=lang==="tr"?"Kutsal Kitap Yeni Çeviri (TCL02) · Tüm bölümü oku →":"World English Bible · Turkish: TCL02 · Read full chapter →";
+ const bu=bibleUrl(v.r);$("#popSrc").href=bu;$("#popSrc").textContent=lang==="tr"?"Kutsal Kitap'ta bölümün tamamını oku →":"Read the full chapter →";
  pop.hidden=false;const r=el.getBoundingClientRect(),w=pop.offsetWidth,h=pop.offsetHeight;
  let x=Math.min(Math.max(16,r.left),innerWidth-w-16),y=r.bottom+8; if(y+h>innerHeight-16)y=r.top-h-8;
  pop.style.left=x+"px";pop.style.top=Math.max(16,y)+"px";
