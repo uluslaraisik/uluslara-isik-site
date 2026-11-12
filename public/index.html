@@ -860,12 +860,12 @@ function openCol(i){curCol=i;const c=COL[i],p=lang==="tr"?c.p:c.pe,last=p.length
  <div class="shm" id="shMenu" hidden>
   <button data-sh="ig-story"><i>📲</i>${tr?"Instagram Hikâye":"Instagram Story"}</button>
   <button data-sh="ig-feed"><i>🖼</i>${tr?"Instagram Gönderi":"Instagram Post"}</button><hr>
-  <a target="_blank" rel="noopener noreferrer" href="https://wa.me/?text=${tt}%20${u}"><i>💬</i>WhatsApp</a>
-  <a target="_blank" rel="noopener noreferrer" href="https://t.me/share/url?url=${u}&text=${tt}"><i>✈️</i>Telegram</a>
-  <a target="_blank" rel="noopener noreferrer" href="https://www.threads.net/intent/post?text=${tt}%20${u}"><i>@</i>Threads</a>
-  <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/sharer/sharer.php?u=${u}"><i>f</i>Facebook</a>
-  <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/intent/tweet?text=${tt}&url=${u}"><i>𝕏</i>X</a><hr>
-  <button data-sh="copy"><i>🔗</i>${tr?"Bağlantıyı kopyala":"Copy link"}</button>${navigator.share?`<button data-sh="more"><i>⋯</i>${tr?"Diğer uygulamalar…":"Other apps…"}</button>`:""}<p class="shnote" id="shNote" hidden></p></div>
+  <button data-sh="wa"><i>💬</i>WhatsApp</button>
+  <button data-sh="tg"><i>✈️</i>Telegram</button>
+  <button data-sh="th"><i>@</i>Threads</button>
+  <button data-sh="fb"><i>f</i>Facebook</button>
+  <button data-sh="x"><i>𝕏</i>X</button><hr>
+  <button data-sh="copy"><i>🔗</i>${tr?"Bağlantıyı kopyala":"Copy link"}</button>${navigator.share&&MOB?`<button data-sh="more"><i>⋯</i>${tr?"Diğer uygulamalar…":"Other apps…"}</button>`:""}<p class="shnote" id="shNote" hidden></p></div>
  <div class="chead" data-pat="${k}">${c.candle?candles(c.candle):""}<div class="chb"><img src="${mark}" alt=""><p class="cmeta">${tr?"Haftalık Yazı · Sayı":"Weekly Column · No."} ${c.n} · ${tr?c.d:c.dEn} · ${c.min} ${tr?"dk":"min"}</p></div><h2 id="rTitle">${T}</h2><span class="cref">${c.ref}</span></div>
  <div class="cbody">${p.map((x,j)=>`<p class="rp${j===last?" rpray":""}${j===0?" dc":""}">${x}</p>`).join("")}
  <div class="rnav">${COL.map((y,q)=>q===i?"":`<button data-col="${q}">${tr?y.t:y.te}</button>`).join("")}</div></div>`;
@@ -898,20 +898,31 @@ function cardBlob(c,H,W=1080,L){return new Promise(res=>{let pend=Promise.resolv
  const im=new Image();im.onload=async()=>{await pend;x.save();x.fillStyle="#fff";x.beginPath();x.roundRect?x.roundRect(pad,by,78,78,18):x.rect(pad,by,78,78);x.fill();x.drawImage(im,pad+6,by+6,66,66);x.restore();
   x.fillStyle=t.ct;x.font="700 30px "+F;x.fillText("Antalya Uluslara Işık Kilisesi",pad+100,by+4);x.fillStyle=t.acc2;x.font="500 28px "+F;x.fillText("uluslaraisik.org",pad+100,by+42);cv.toBlob(res,"image/png")};
  im.onerror=()=>cv.toBlob(res,"image/png");im.src=document.querySelector(".brand img").src})}
+const MOB=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1),AND=/Android/i.test(navigator.userAgent);
+function snsUrl(k,c){const T=lang==="tr"?c.t:c.te,U=colUrl(c),e=encodeURIComponent,m=e(T+" "+U);
+ const W={wa:(MOB?"https://wa.me/?text=":"https://web.whatsapp.com/send?text=")+m,tg:"https://t.me/share/url?url="+e(U)+"&text="+e(T),th:"https://www.threads.net/intent/post?text="+m,fb:"https://www.facebook.com/sharer/sharer.php?u="+e(U),x:"https://x.com/intent/post?text="+e(T)+"&url="+e(U)};
+ const A={wa:"whatsapp://send?text="+m,tg:"tg://msg_url?url="+e(U)+"&text="+e(T),th:"barcelona://create?text="+m,fb:"fb://facewebmodal/f?href="+e(W.fb),x:"twitter://post?message="+m};
+ return [A[k],W[k]]}
+function openApp(app,web){let gone=false;const h=()=>{if(document.hidden)gone=true};document.addEventListener("visibilitychange",h);
+ location.href=app;setTimeout(()=>{document.removeEventListener("visibilitychange",h);if(!gone&&!document.hidden&&web)location.href=web},1700)}
 const SHC={};
 function prep(c){const key=c.n+"-"+lang;if(!SHC[key]){const o=SHC[key]={};["story","feed"].forEach(k=>{o[k+"P"]=cardBlob(c,k==="story"?1920:1350).then(b=>o[k]=new File([b],"uluslara-isik-yazi-"+c.n+(k==="story"?"-hikaye":"")+".png",{type:"image/png"}))})}return SHC[key]}
 function shNote(t){const n=$("#shNote");if(n){n.textContent=t;n.hidden=!t}}
 function flash(btn,t){const old=btn.innerHTML;btn.innerHTML="<i>✓</i>"+t;setTimeout(()=>btn.innerHTML=old,2000)}
-async function shareCol(kind,btn){const c=COL[curCol],tr=lang==="tr",T=tr?c.t:c.te;
+function dl(f){const a=document.createElement("a");a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
+async function shareCol(kind,btn){const c=COL[curCol],tr=lang==="tr",T=tr?c.t:c.te;shNote("");
  try{if(kind==="copy"){await navigator.clipboard.writeText(colUrl(c));flash(btn,tr?"Kopyalandı":"Copied");return}
   if(kind==="more"){await navigator.share({title:T,text:T+" — "+c.ref,url:colUrl(c)});shMenu(false);return}
-  const k=kind==="ig-story"?"story":"feed",o=prep(c);let f=o[k];
-  const can=f0=>navigator.canShare&&navigator.canShare({files:[f0]});
-  if(f&&can(f)){await navigator.share({files:[f]});shMenu(false);return}
-  if(!f){f=await o[k+"P"];if(can(f)){await navigator.share({files:[f]});shMenu(false);return}}
-  const a=document.createElement("a");a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);
-  flash(btn,tr?"Görsel kaydedildi":"Image saved");shNote(tr?"Bu cihaz Instagram'a doğrudan gönderemiyor. Telefonda bu menüden Instagram'ı seçtiğinizde görsel doğrudan Hikâye/Gönderi ekranına gider. Şimdilik görsel kaydedildi.":"This device can't send straight to Instagram. On a phone, choosing Instagram here opens the Story/Post screen with the image. For now the image was saved.")}
- catch(e){if(e&&e.name==="NotAllowedError"){shNote(tr?"Lütfen tekrar dokunun.":"Please tap again.")}}}
+  if(["wa","tg","th","fb","x"].includes(kind)){const [app,web]=snsUrl(kind,c);shMenu(false);
+   if(MOB)openApp(app,web);else window.open(web,"_blank","noopener,width=680,height=720");return}
+  const k=kind==="ig-story"?"story":"feed",o=prep(c),f=o[k]||await o[k+"P"];
+  if(!MOB){dl(f);window.open("https://www.instagram.com/","_blank","noopener");flash(btn,tr?"Görsel indirildi":"Image downloaded");
+   shNote(tr?"Görsel indirildi ve Instagram açıldı. Instagram'da “+ Oluştur” ile indirilen görseli seçin. Hikâye paylaşımı bilgisayardan yapılamaz; telefonda doğrudan açılır.":"The image was downloaded and Instagram opened. In Instagram choose “+ Create” and pick the downloaded image. Stories can't be posted from a computer; on a phone this opens directly.");return}
+  if(k==="story"){let ok=false;try{await navigator.clipboard.write([new ClipboardItem({"image/png":f})]);ok=true}catch(e){}
+   if(ok){shMenu(false);openApp("instagram://story-camera",null);setTimeout(()=>shNote(tr?"Görsel kopyalandı. Instagram Hikâye ekranında metin (Aa) alanına basılı tutup “Yapıştır”ı seçin.":"Image copied. In the Instagram Story screen, long-press the text (Aa) area and choose “Paste”."),300);return}}
+  if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});shMenu(false);return}
+  dl(f);flash(btn,tr?"Görsel kaydedildi":"Image saved");openApp("instagram://camera",null)}
+ catch(e){if(e&&e.name==="NotAllowedError")shNote(tr?"Lütfen tekrar dokunun.":"Please tap again.")}}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-sh]");if(b)shareCol(b.dataset.sh,b)});
 function openQA(i){const x=QA[i];
  $("#rBody").innerHTML=`<p class="col-meta">${lang==="tr"?"Sorular ve cevaplar":"Questions & answers"} · ${String(i+1).padStart(2,"0")}/${String(QA.length).padStart(2,"0")} · ${x.min} ${lang==="tr"?"dk okuma":"min read"}</p><h2 id="rTitle">${lang==="tr"?x.q:x.e}</h2>${blocks(lang==="tr"?x.f:x.fe)}
