@@ -244,6 +244,7 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;backgroun
 .shm{position:absolute;right:14px;top:60px;z-index:4;width:250px;background:var(--surface,#fff);color:var(--fg);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 50px #0b0e1a40;padding:6px}
 .shm button,.shm a{display:flex;align-items:center;gap:10px;width:100%;box-sizing:border-box;border:0;background:none;color:inherit;text-decoration:none;text-align:left;padding:10px 12px;border-radius:9px;font:500 14.5px var(--f-body);cursor:pointer}
 .shm button:hover,.shm a:hover{background:var(--bg)}.shm i{font-style:normal;width:22px;text-align:center}
+.shtoast{position:absolute;right:14px;top:60px;z-index:4;max-width:280px;background:var(--surface,#fff);border:1px solid var(--line);border-radius:12px;padding:10px 12px;box-shadow:0 12px 34px #0b0e1a33}
 .shnote{margin:6px 8px 4px;font-size:12.5px;line-height:1.45;color:var(--muted)}
 .shm hr{border:0;border-top:1px solid var(--line);margin:4px 6px}
 @media(max-width:600px){.chead{padding:40px 20px 28px}.cbody{padding:24px 20px 20px}.shbtn span{display:none}.shbtn{padding:0 11px}.chead .chb{padding-right:84px}}
@@ -856,22 +857,14 @@ const IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-widt
 function openCol(i){curCol=i;const c=COL[i],p=lang==="tr"?c.p:c.pe,last=p.length-1,tr=lang==="tr",[k,t]=thOf(c),T=tr?c.t:c.te,u=encodeURIComponent(colUrl(c)),tt=encodeURIComponent(T);
  const mark=document.querySelector(".brand img").src,box=document.querySelector("#reader .rbox");
  for(const v in t)box.style.setProperty("--"+v,t[v]);
- $("#rBody").innerHTML=`<button type="button" class="shbtn" id="shBtn" aria-haspopup="true" aria-expanded="false">${IC}<span>${tr?"Paylaş":"Share"}</span></button>
- <div class="shm" id="shMenu" hidden>
-  <button data-sh="ig-story"><i>📲</i>${tr?"Instagram Hikâye":"Instagram Story"}</button>
-  <button data-sh="ig-feed"><i>🖼</i>${tr?"Instagram Gönderi":"Instagram Post"}</button><hr>
-  <button data-sh="wa"><i>💬</i>WhatsApp</button>
-  <button data-sh="tg"><i>✈️</i>Telegram</button>
-  <button data-sh="th"><i>@</i>Threads</button>
-  <button data-sh="fb"><i>f</i>Facebook</button>
-  <button data-sh="x"><i>𝕏</i>X</button><hr>
-  <button data-sh="copy"><i>🔗</i>${tr?"Bağlantıyı kopyala":"Copy link"}</button>${navigator.share&&MOB?`<button data-sh="more"><i>⋯</i>${tr?"Diğer uygulamalar…":"Other apps…"}</button>`:""}<p class="shnote" id="shNote" hidden></p></div>
+ $("#rBody").innerHTML=`<button type="button" class="shbtn" id="shBtn" >${IC}<span>${tr?"Paylaş":"Share"}</span></button>
+ <p class="shnote shtoast" id="shNote" hidden></p>
  <div class="chead" data-pat="${k}">${c.candle?candles(c.candle):""}<div class="chb"><img src="${mark}" alt=""><p class="cmeta">${tr?"Haftalık Yazı · Sayı":"Weekly Column · No."} ${c.n} · ${tr?c.d:c.dEn} · ${c.min} ${tr?"dk":"min"}</p></div><h2 id="rTitle">${T}</h2><span class="cref">${c.ref}</span></div>
  <div class="cbody">${p.map((x,j)=>`<p class="rp${j===last?" rpray":""}${j===0?" dc":""}">${x}</p>`).join("")}
  <div class="rnav">${COL.map((y,q)=>q===i?"":`<button data-col="${q}">${tr?y.t:y.te}</button>`).join("")}</div></div>`;
- showReader(0,i);try{history.replaceState(null,"","#yazi-"+c.n)}catch(e){}}
-function shMenu(o){const m=$("#shMenu"),b=$("#shBtn");if(!m)return;m.hidden=!o;b.setAttribute("aria-expanded",o)}
-document.addEventListener("click",e=>{if(e.target.closest("#shBtn")){const o=$("#shMenu").hidden;shMenu(o);if(o)prep(COL[curCol]);return}if($("#shMenu")&&!e.target.closest("#shMenu"))shMenu(false)});
+ showReader(0,i);prep(c);try{history.replaceState(null,"","#yazi-"+c.n)}catch(e){}}
+function shMenu(o){return;const m=$("#shMenu"),b=$("#shBtn");if(!m)return;m.hidden=!o;b.setAttribute("aria-expanded",o)}
+document.addEventListener("click",e=>{const b=e.target.closest("#shBtn");if(b)shareNow(b)});
 function wrap(ctx,t,w){const o=[];let l="";for(const wd of t.split(" ")){const x=l?l+" "+wd:wd;if(ctx.measureText(x).width>w&&l){o.push(l);l=wd}else l=x}if(l)o.push(l);return o}
 function cardBlob(c,H,W=1080,L){return new Promise(res=>{let pend=Promise.resolve();const tr=(L||lang)==="tr",LS=W>H,cv=document.createElement("canvas");cv.width=W;cv.height=H;const x=cv.getContext("2d"),F=getComputedStyle(document.body).getPropertyValue("--f-display")||"system-ui",[k,t]=thOf(c);
  let g=x.createLinearGradient(0,0,W*.4,H);g.addColorStop(0,t.ca);g.addColorStop(1,t.cb);x.fillStyle=g;x.fillRect(0,0,W,H);
@@ -910,6 +903,12 @@ function prep(c){const key=c.n+"-"+lang;if(!SHC[key]){const o=SHC[key]={};["stor
 function shNote(t){const n=$("#shNote");if(n){n.textContent=t;n.hidden=!t}}
 function flash(btn,t){const old=btn.innerHTML;btn.innerHTML="<i>✓</i>"+t;setTimeout(()=>btn.innerHTML=old,2000)}
 function dl(f){const a=document.createElement("a");a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
+async function shareNow(btn){const c=COL[curCol],tr=lang==="tr",T=tr?c.t:c.te,U=colUrl(c),o=prep(c);shNote("");
+ try{let f=o.feed;const can=x=>navigator.canShare&&navigator.canShare({files:[x]});
+  if(navigator.share){if(!f)f=await o.feedP;const d={title:T,text:T+" — "+c.ref+"\n"+U};if(can(f))d.files=[f];else d.url=U;await navigator.share(d);return}
+  f=f||await o.feedP;dl(f);try{await navigator.clipboard.writeText(U)}catch(e){}
+  shNote(tr?"Bu tarayıcı doğrudan paylaşımı desteklemiyor. Kart görseli indirildi ve bağlantı kopyalandı.":"This browser can't share directly. The card image was downloaded and the link copied.");setTimeout(()=>shNote(""),6000)}
+ catch(e){if(e&&e.name==="NotAllowedError")shNote(tr?"Lütfen tekrar dokunun.":"Please tap again.")}}
 async function shareCol(kind,btn){const c=COL[curCol],tr=lang==="tr",T=tr?c.t:c.te;shNote("");
  try{if(kind==="copy"){await navigator.clipboard.writeText(colUrl(c));flash(btn,tr?"Kopyalandı":"Copied");return}
   if(kind==="more"){await navigator.share({title:T,text:T+" — "+c.ref,url:colUrl(c)});shMenu(false);return}
