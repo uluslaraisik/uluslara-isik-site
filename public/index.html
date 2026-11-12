@@ -217,28 +217,31 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;backgroun
 .rnav{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}.rnav button{border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:999px;padding:9px 16px;cursor:pointer;font:600 14px inherit}
 
 .rbox.col{padding:0;overflow:hidden}
-.rbox.col .jx{color:#fff;z-index:2;background:#ffffff1f;border-radius:50%;width:38px;height:38px;right:14px;top:14px;display:grid;place-items:center;font-size:24px}
-.chead{position:relative;padding:44px 32px 34px;color:#fff;overflow:hidden;background:radial-gradient(ellipse 80% 70% at 50% 135%,#FFAA4D88,transparent 70%),linear-gradient(165deg,#2b3158,#161a33 80%)}
-.chead::before{content:"";position:absolute;inset:0;background:repeating-conic-gradient(from 0deg at 50% 135%,#ffffff12 0 5deg,transparent 5deg 10deg);-webkit-mask:linear-gradient(#000 20%,transparent 85%);mask:linear-gradient(#000 20%,transparent 85%)}
-.chead::after{content:"✦  ·  ✦";position:absolute;right:62px;top:22px;color:#FFAA4D;opacity:.7;font-size:13px;letter-spacing:.3em}
+.rbox.col>.jx{color:var(--ct,#fff);z-index:3;background:color-mix(in srgb,var(--ct,#fff) 14%,transparent);border-radius:50%;width:38px;height:38px;right:14px;top:14px;display:grid;place-items:center;font-size:24px}
+.chead{position:relative;padding:44px 32px 34px;color:var(--ct);overflow:hidden;background:linear-gradient(160deg,var(--ca),var(--cb))}
+.chead::before{content:"";position:absolute;inset:0;pointer-events:none}
+.chead[data-pat="stars"]::before{background:radial-gradient(1.6px 1.6px at 12% 22%,#fff9,transparent),radial-gradient(1.2px 1.2px at 30% 70%,#fff8,transparent),radial-gradient(2px 2px at 55% 30%,#ffe2b8cc,transparent),radial-gradient(1.2px 1.2px at 72% 78%,#fff8,transparent),radial-gradient(1.8px 1.8px at 88% 40%,#fffa,transparent),radial-gradient(1px 1px at 42% 12%,#fff8,transparent),radial-gradient(1.4px 1.4px at 64% 58%,#fff7,transparent),radial-gradient(1px 1px at 20% 88%,#fff6,transparent);background-size:340px 220px}
+.chead[data-pat="waves"]::before{opacity:.22;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='28'%3E%3Cpath d='M0 14 Q30 2 60 14 T120 14' fill='none' stroke='white' stroke-width='1.4'/%3E%3C/svg%3E") 0 0/120px 28px;-webkit-mask:linear-gradient(transparent 30%,#000);mask:linear-gradient(transparent 30%,#000)}
+.chead[data-pat="olive"]::before{opacity:.3;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260' viewBox='0 0 260 260'%3E%3Cg fill='none' stroke='white' stroke-width='2'%3E%3Cpath d='M30 240 C90 180 150 120 240 30'/%3E%3C/g%3E%3Cg fill='white'%3E%3Cellipse cx='80' cy='178' rx='22' ry='8' transform='rotate(-70 80 178)'/%3E%3Cellipse cx='104' cy='176' rx='22' ry='8' transform='rotate(10 104 176)'/%3E%3Cellipse cx='120' cy='132' rx='22' ry='8' transform='rotate(-70 120 132)'/%3E%3Cellipse cx='146' cy='132' rx='22' ry='8' transform='rotate(10 146 132)'/%3E%3Cellipse cx='164' cy='88' rx='22' ry='8' transform='rotate(-70 164 88)'/%3E%3Cellipse cx='190' cy='88' rx='22' ry='8' transform='rotate(10 190 88)'/%3E%3Cellipse cx='214' cy='46' rx='20' ry='7' transform='rotate(-40 214 46)'/%3E%3C/g%3E%3C/svg%3E") right -30px bottom -40px/260px no-repeat}
+.chead[data-pat="dots"]::before{opacity:.28;background:radial-gradient(circle,#fff 1.3px,transparent 1.6px) 0 0/18px 18px;-webkit-mask:linear-gradient(100deg,transparent 35%,#000);mask:linear-gradient(100deg,transparent 35%,#000)}
+.chead[data-pat="frame"]::before{inset:12px;border:1px solid color-mix(in srgb,var(--acc) 60%,transparent);border-radius:12px;box-shadow:inset 0 0 0 4px var(--ca),inset 0 0 0 5px color-mix(in srgb,var(--acc) 35%,transparent)}
 .chead>*{position:relative}
-.chead .chb{display:flex;align-items:center;gap:10px;margin-bottom:18px}.chead .chb .cmeta{flex:1;min-width:0;max-width:none}.chead .chb img{flex:none;width:34px;height:34px;border-radius:9px;background:#fff;padding:3px}
-.chead .cmeta{margin:0;color:#FFC98A;font:600 12px/1.3 var(--f-body);letter-spacing:.13em;text-transform:uppercase}
-.rbox.col .chead h2{color:#fff;margin:0 0 14px;font-size:clamp(28px,5.4vw,40px)}
-.chead .cref{display:inline-block;border:1px solid #FFAA4D99;color:#FFD9AE;border-radius:999px;padding:5px 14px;font:600 13px var(--f-body)}
+.chead .chb{display:flex;align-items:center;gap:10px;margin-bottom:18px;padding-right:120px}.chead .chb .cmeta{flex:1;min-width:0;max-width:none}.chead .chb img{flex:none;width:34px;height:34px;border-radius:9px;background:#fff;padding:3px}
+.chead .cmeta{margin:0;color:var(--acc2);font:600 12px/1.3 var(--f-body);letter-spacing:.13em;text-transform:uppercase}
+.rbox.col .chead h2{color:var(--ct);margin:0 0 14px;font-size:clamp(28px,5.4vw,40px)}
+.chead .cref{display:inline-block;border:1px solid var(--acc);color:var(--acc2);border-radius:999px;padding:5px 14px;font:600 13px var(--f-body)}
 .cbody{padding:30px 32px 26px;background:var(--surface,#fff)}
-.cbody .dc::first-letter{float:left;font:700 3.6em/.85 var(--f-display);color:var(--sun);padding:8px 12px 0 0}
-.cbody .rpray{border-left:4px solid var(--sun-2,#FFAA4D);border-radius:4px 12px 12px 4px;background:color-mix(in srgb,var(--sun) 9%,var(--bg));margin-top:26px}
-.cbody .rpray::before{content:"✦  DUA";display:block;font:700 11.5px var(--f-body);letter-spacing:.16em;color:var(--sun);font-style:normal;margin-bottom:6px}
+.cbody .dc::first-letter{float:left;font:700 3.6em/.85 var(--f-display);color:var(--acc);padding:8px 12px 0 0}
+.cbody .rpray{border-left:4px solid var(--acc);border-radius:4px 12px 12px 4px;background:color-mix(in srgb,var(--acc) 10%,var(--bg));margin-top:26px}
+.cbody .rpray::before{content:"✦  DUA";display:block;font:700 11.5px var(--f-body);letter-spacing:.16em;color:var(--acc);font-style:normal;margin-bottom:6px}
 .en .cbody .rpray::before{content:"✦  PRAYER"}
-.share{margin-top:26px;padding:18px;border:1px dashed color-mix(in srgb,var(--sun) 55%,transparent);border-radius:14px;background:color-mix(in srgb,var(--sun) 5%,var(--surface,#fff))}
-.share>b{display:block;font:700 13px var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--sun);margin-bottom:10px}
-.share .sb{display:flex;flex-wrap:wrap;gap:8px}
-.share .sb button,.share .sb a{border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:999px;padding:9px 15px;font:600 14px var(--f-body);cursor:pointer;text-decoration:none}
-.share .sb .pri{background:linear-gradient(135deg,var(--sun-2),var(--sun));color:#fff;border-color:transparent}
-.share .sb button:hover,.share .sb a:hover{filter:brightness(.96);transform:translateY(-1px)}
-.share small{display:block;margin-top:10px;color:var(--muted);font-size:12.5px}
-@media(max-width:600px){.chead{padding:40px 20px 28px}.cbody{padding:24px 20px 20px}}
+.shbtn{position:absolute;right:62px;top:14px;z-index:3;height:38px;display:flex;align-items:center;gap:7px;padding:0 15px;border-radius:999px;border:0;cursor:pointer;font:600 14px var(--f-body);color:var(--ct);background:color-mix(in srgb,var(--ct) 14%,transparent)}
+.shbtn:hover{background:color-mix(in srgb,var(--ct) 24%,transparent)}.shbtn svg{width:17px;height:17px}
+.shm{position:absolute;right:14px;top:60px;z-index:4;width:250px;background:var(--surface,#fff);color:var(--fg);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 50px #0b0e1a40;padding:6px}
+.shm button,.shm a{display:flex;align-items:center;gap:10px;width:100%;box-sizing:border-box;border:0;background:none;color:inherit;text-decoration:none;text-align:left;padding:10px 12px;border-radius:9px;font:500 14.5px var(--f-body);cursor:pointer}
+.shm button:hover,.shm a:hover{background:var(--bg)}.shm i{font-style:normal;width:22px;text-align:center}
+.shm hr{border:0;border-top:1px solid var(--line);margin:4px 6px}
+@media(max-width:600px){.chead{padding:40px 20px 28px}.cbody{padding:24px 20px 20px}.shbtn span{display:none}.shbtn{padding:0 11px}.chead .chb{padding-right:84px}}
 @media(max-width:600px){.rbox{padding:32px 20px 22px}}
 #join{position:fixed;inset:0;z-index:300;background:#0B0E1Acc;display:grid;place-items:center;padding:16px;overflow:auto}
 .jbox{position:relative;background:var(--surface,#fff);color:var(--fg);border-radius:18px;padding:28px 24px 22px;max-width:460px;width:100%;display:grid;gap:12px}
@@ -809,44 +812,65 @@ function renderCol(){
 let curCol=0;
 function blocks(arr){return arr.map(x=>x.startsWith("## ")?`<h3 class="rh">${x.slice(3)}</h3>`:`<p class="rp">${refs(x)}</p>`).join("")}
 const SITE="https://uluslaraisik.org/";
+const TH={
+ stars:{ca:"#2b3158",cb:"#141831",ct:"#ffffff",acc:"#F5A04A",acc2:"#FFD3A1"},
+ waves:{ca:"#0E5E6F",cb:"#0A3A4A",ct:"#ffffff",acc:"#6FD3D8",acc2:"#BDEFF0"},
+ olive:{ca:"#4E5D2E",cb:"#2F3A1C",ct:"#ffffff",acc:"#E1C46A",acc2:"#F1E2B0"},
+ dots:{ca:"#A9502F",cb:"#6E2F1E",ct:"#ffffff",acc:"#FFC27A",acc2:"#FFE0BD"},
+ frame:{ca:"#F6EEDD",cb:"#EADBBE",ct:"#262B47",acc:"#B5651D",acc2:"#8A4A14"}};
+const THK=["stars","waves","olive","dots","frame"];
+function thOf(c){const k=c.th||THK[(c.n+1)%THK.length];return [k,TH[k]]}
 function colUrl(c){return SITE+"#yazi-"+c.n}
-function openCol(i){curCol=i;const c=COL[i],p=lang==="tr"?c.p:c.pe,last=p.length-1,tr=lang==="tr";
- const mark=document.querySelector(".brand img").src;
- $("#rBody").innerHTML=`<div class="chead"><div class="chb"><img src="${mark}" alt=""><p class="cmeta">${tr?"Haftalık Yazı · Sayı":"Weekly Column · No."} ${c.n} · ${tr?c.d:c.dEn} · ${c.min} ${tr?"dk":"min"}</p></div><h2 id="rTitle">${tr?c.t:c.te}</h2><span class="cref">${c.ref}</span></div>
+const IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>';
+function openCol(i){curCol=i;const c=COL[i],p=lang==="tr"?c.p:c.pe,last=p.length-1,tr=lang==="tr",[k,t]=thOf(c),T=tr?c.t:c.te,u=encodeURIComponent(colUrl(c)),tt=encodeURIComponent(T);
+ const mark=document.querySelector(".brand img").src,box=document.querySelector("#reader .rbox");
+ for(const v in t)box.style.setProperty("--"+v,t[v]);
+ $("#rBody").innerHTML=`<button type="button" class="shbtn" id="shBtn" aria-haspopup="true" aria-expanded="false">${IC}<span>${tr?"Paylaş":"Share"}</span></button>
+ <div class="shm" id="shMenu" hidden>
+  ${navigator.share?`<button data-sh="native"><i>📱</i>${tr?"Telefonda paylaş…":"Share from phone…"}</button><hr>`:""}
+  <button data-sh="feed"><i>🖼</i>${tr?"Instagram gönderisi (4:5)":"Instagram post (4:5)"}</button>
+  <button data-sh="story"><i>📲</i>${tr?"Instagram hikâyesi (9:16)":"Instagram story (9:16)"}</button><hr>
+  <a target="_blank" rel="noopener noreferrer" href="https://wa.me/?text=${tt}%20${u}"><i>💬</i>WhatsApp</a>
+  <a target="_blank" rel="noopener noreferrer" href="https://t.me/share/url?url=${u}&text=${tt}"><i>✈️</i>Telegram</a>
+  <a target="_blank" rel="noopener noreferrer" href="https://www.threads.net/intent/post?text=${tt}%20${u}"><i>@</i>Threads</a>
+  <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/intent/tweet?text=${tt}&url=${u}"><i>𝕏</i>X</a>
+  <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/sharer/sharer.php?u=${u}"><i>f</i>Facebook</a><hr>
+  <button data-sh="copy"><i>🔗</i>${tr?"Bağlantıyı kopyala":"Copy link"}</button></div>
+ <div class="chead" data-pat="${k}"><div class="chb"><img src="${mark}" alt=""><p class="cmeta">${tr?"Haftalık Yazı · Sayı":"Weekly Column · No."} ${c.n} · ${tr?c.d:c.dEn} · ${c.min} ${tr?"dk":"min"}</p></div><h2 id="rTitle">${T}</h2><span class="cref">${c.ref}</span></div>
  <div class="cbody">${p.map((x,j)=>`<p class="rp${j===last?" rpray":""}${j===0?" dc":""}">${x}</p>`).join("")}
- <div class="share"><b>${tr?"Bu yazıyı paylaş":"Share this column"}</b><div class="sb">
-  ${navigator.share?`<button class="pri" data-sh="native">${tr?"Paylaş…":"Share…"}</button>`:""}
-  <button class="${navigator.share?"":"pri"}" data-sh="feed">${tr?"Instagram görseli (4:5)":"Instagram image (4:5)"}</button>
-  <button data-sh="story">${tr?"Hikâye görseli (9:16)":"Story image (9:16)"}</button>
-  <button data-sh="copy">${tr?"Bağlantıyı kopyala":"Copy link"}</button>
-  <a target="_blank" rel="noopener noreferrer" href="https://wa.me/?text=${encodeURIComponent((tr?c.t:c.te)+" "+colUrl(c))}">WhatsApp</a>
-  <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(tr?c.t:c.te)}&url=${encodeURIComponent(colUrl(c))}">X</a>
-  <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(colUrl(c))}">Facebook</a></div>
-  <small>${tr?"Instagram'da paylaşmak için görseli kaydedin ya da telefonda “Paylaş…” ile doğrudan gönderin.":"To post on Instagram, save the image, or use “Share…” on your phone to send it directly."}</small></div>
- <div class="rnav">${COL.map((y,k)=>k===i?"":`<button data-col="${k}">${tr?y.t:y.te}</button>`).join("")}</div></div>`;
+ <div class="rnav">${COL.map((y,q)=>q===i?"":`<button data-col="${q}">${tr?y.t:y.te}</button>`).join("")}</div></div>`;
  showReader(0,i);try{history.replaceState(null,"","#yazi-"+c.n)}catch(e){}}
+function shMenu(o){const m=$("#shMenu"),b=$("#shBtn");if(!m)return;m.hidden=!o;b.setAttribute("aria-expanded",o)}
+document.addEventListener("click",e=>{if(e.target.closest("#shBtn")){shMenu($("#shMenu").hidden);return}if($("#shMenu")&&!e.target.closest("#shMenu"))shMenu(false)});
 function wrap(ctx,t,w){const o=[];let l="";for(const wd of t.split(" ")){const x=l?l+" "+wd:wd;if(ctx.measureText(x).width>w&&l){o.push(l);l=wd}else l=x}if(l)o.push(l);return o}
-function cardBlob(c,H){return new Promise(res=>{const tr=lang==="tr",W=1080,cv=document.createElement("canvas");cv.width=W;cv.height=H;const x=cv.getContext("2d"),F=getComputedStyle(document.body).getPropertyValue("--f-display")||"system-ui";
- let g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,"#2b3158");g.addColorStop(1,"#12152b");x.fillStyle=g;x.fillRect(0,0,W,H);
- const cx=W/2,cy=H*1.02;x.save();x.globalAlpha=.07;x.fillStyle="#fff";for(let a=0;a<360;a+=10){x.beginPath();x.moveTo(cx,cy);const r=H*1.3,a1=a*Math.PI/180,a2=(a+5)*Math.PI/180;x.lineTo(cx+r*Math.cos(a1),cy+r*Math.sin(a1));x.lineTo(cx+r*Math.cos(a2),cy+r*Math.sin(a2));x.fill()}x.restore();
- g=x.createRadialGradient(cx,cy,0,cx,cy,H*.7);g.addColorStop(0,"#FFAA4Dcc");g.addColorStop(1,"#FFAA4D00");x.fillStyle=g;x.fillRect(0,0,W,H);
- let sd=7;const rnd=()=>(sd=(sd*9301+49297)%233280)/233280;x.fillStyle="#FFE2B8";for(let k=0;k<46;k++){x.globalAlpha=.25+rnd()*.5;x.beginPath();x.arc(rnd()*W,rnd()*H*.55,.8+rnd()*2.2,0,7);x.fill()}x.globalAlpha=1;
- const pad=96,top=H>1500?260:170;
- x.fillStyle="#FFC98A";x.font="600 28px "+F;x.textBaseline="top";try{x.letterSpacing="4px"}catch(e){}
+function cardBlob(c,H){return new Promise(res=>{const tr=lang==="tr",W=1080,cv=document.createElement("canvas");cv.width=W;cv.height=H;const x=cv.getContext("2d"),F=getComputedStyle(document.body).getPropertyValue("--f-display")||"system-ui",[k,t]=thOf(c);
+ let g=x.createLinearGradient(0,0,W*.4,H);g.addColorStop(0,t.ca);g.addColorStop(1,t.cb);x.fillStyle=g;x.fillRect(0,0,W,H);
+ let sd=c.n*7+3;const rnd=()=>(sd=(sd*9301+49297)%233280)/233280;x.save();
+ if(k==="stars"){x.fillStyle="#FFE9CC";for(let q=0;q<90;q++){x.globalAlpha=.25+rnd()*.6;x.beginPath();x.arc(rnd()*W,rnd()*H,.8+rnd()*2.4,0,7);x.fill()}}
+ if(k==="waves"){x.strokeStyle="#fff";x.lineWidth=2.4;for(let yy=H*.5;yy<H;yy+=34){x.globalAlpha=.06+.22*(yy-H*.5)/(H*.5);x.beginPath();for(let xx=0;xx<=W;xx+=10)x.lineTo(xx,yy+Math.sin(xx/80+yy/50)*9);x.stroke()}}
+ if(k==="olive"){x.globalAlpha=.2;x.strokeStyle="#fff";x.fillStyle="#fff";x.lineWidth=4;const P0=[W+30,60],P1=[W-120,150],P2=[W-360,380],B=(q,i)=>(1-q)*(1-q)*P0[i]+2*(1-q)*q*P1[i]+q*q*P2[i];
+  x.beginPath();x.moveTo(P0[0],P0[1]);x.quadraticCurveTo(P1[0],P1[1],P2[0],P2[1]);x.stroke();
+  for(let q=.12;q<=1.001;q+=.11){const px=B(q,0),py=B(q,1),dx=B(q+.01,0)-px,dy=B(q+.01,1)-py,an=Math.atan2(dy,dx);[-1,1].forEach(sg=>{x.save();x.translate(px,py);x.rotate(an+sg*0.75);x.beginPath();x.ellipse(30,0,32,10,0,0,7);x.fill();x.restore()})}
+  x.save();x.translate(P2[0],P2[1]);x.rotate(Math.atan2(P2[1]-P1[1],P2[0]-P1[0]));x.beginPath();x.ellipse(28,0,30,10,0,0,7);x.fill();x.restore()}
+ if(k==="dots"){for(let yy=12;yy<H;yy+=30)for(let xx=12;xx<W;xx+=30){x.globalAlpha=Math.max(0,(xx/W-.35))*.45;x.fillStyle="#fff";x.beginPath();x.arc(xx,yy,2,0,7);x.fill()}}
+ if(k==="frame"){x.globalAlpha=1;x.strokeStyle=t.acc;x.lineWidth=2;x.strokeRect(36,36,W-72,H-72);x.globalAlpha=.5;x.lineWidth=1.2;x.strokeRect(50,50,W-100,H-100)}
+ x.restore();
+ const pad=110,top=H>1500?270:180;x.textBaseline="top";
+ x.fillStyle=t.acc2;x.font="600 28px "+F;try{x.letterSpacing="4px"}catch(e){}
  x.fillText((tr?"HAFTALIK YAZI · SAYI ":"WEEKLY COLUMN · NO. ")+c.n,pad,top);try{x.letterSpacing="0px"}catch(e){}
- x.font="700 78px "+F;x.fillStyle="#fff";const tl=wrap(x,tr?c.t:c.te,W-pad*2);let y=top+72;tl.forEach(l=>{x.fillText(l,pad,y);y+=92});
- y+=14;x.font="600 32px "+F;const ref=c.ref,rw=x.measureText(ref).width+48;x.strokeStyle="#FFAA4D";x.lineWidth=2;x.beginPath();x.roundRect?x.roundRect(pad,y,rw,58,29):x.rect(pad,y,rw,58);x.stroke();x.fillStyle="#FFD9AE";x.fillText(ref,pad+24,y+12);y+=110;
- let ex=(tr?c.p:c.pe)[0],sn=ex.match(/[^.!?]+[.!?]+(\s|$)/g)||[ex],o="";for(const t of sn){if((o+t).length>240&&o)break;o+=t}ex=o.trim();if(ex.length>270)ex=ex.slice(0,267).replace(/\s\S*$/,"")+"…";
- x.font="italic 400 44px Georgia,serif";x.fillStyle="#E9EDF9";wrap(x,"“"+ex+"”",W-pad*2).forEach(l=>{x.fillText(l,pad,y);y+=64});
- const by=H-170;x.fillStyle="#ffffff30";x.fillRect(pad,by-34,W-pad*2,2);
+ x.font="700 78px "+F;x.fillStyle=t.ct;let y=top+72;wrap(x,tr?c.t:c.te,W-pad*2).forEach(l=>{x.fillText(l,pad,y);y+=92});
+ y+=14;x.font="600 32px "+F;const rw=x.measureText(c.ref).width+48;x.strokeStyle=t.acc;x.lineWidth=2;x.beginPath();x.roundRect?x.roundRect(pad,y,rw,58,29):x.rect(pad,y,rw,58);x.stroke();x.fillStyle=t.acc2;x.fillText(c.ref,pad+24,y+12);y+=110;
+ let ex=(tr?c.p:c.pe)[0],sn=ex.match(/[^.!?]+[.!?]+(\s|$)/g)||[ex],o="";for(const z of sn){if((o+z).length>240&&o)break;o+=z}ex=o.trim();if(ex.length>270)ex=ex.slice(0,267).replace(/\s\S*$/,"")+"…";
+ x.font="italic 400 44px Georgia,serif";x.fillStyle=t.ct;x.globalAlpha=.9;wrap(x,"“"+ex+"”",W-pad*2).forEach(l=>{x.fillText(l,pad,y);y+=64});x.globalAlpha=1;
+ const by=H-190;x.fillStyle=t.ct;x.globalAlpha=.25;x.fillRect(pad,by-34,W-pad*2,2);x.globalAlpha=1;
  const im=new Image();im.onload=()=>{x.save();x.fillStyle="#fff";x.beginPath();x.roundRect?x.roundRect(pad,by,78,78,18):x.rect(pad,by,78,78);x.fill();x.drawImage(im,pad+6,by+6,66,66);x.restore();
-  x.fillStyle="#fff";x.font="700 30px "+F;x.fillText("Antalya Uluslara Işık Kilisesi",pad+100,by+4);x.fillStyle="#FFC98A";x.font="500 28px "+F;x.fillText("uluslaraisik.org",pad+100,by+42);cv.toBlob(res,"image/png")};
+  x.fillStyle=t.ct;x.font="700 30px "+F;x.fillText("Antalya Uluslara Işık Kilisesi",pad+100,by+4);x.fillStyle=t.acc2;x.font="500 28px "+F;x.fillText("uluslaraisik.org",pad+100,by+42);cv.toBlob(res,"image/png")};
  im.onerror=()=>cv.toBlob(res,"image/png");im.src=document.querySelector(".brand img").src})}
-async function shareCol(kind){const c=COL[curCol],tr=lang==="tr",btn=document.querySelector('[data-sh="'+kind+'"]'),old=btn&&btn.textContent;
- try{if(kind==="copy"){await navigator.clipboard.writeText(colUrl(c));btn.textContent=tr?"Kopyalandı ✓":"Copied ✓";setTimeout(()=>btn.textContent=old,1800);return}
+async function shareCol(kind){const c=COL[curCol],tr=lang==="tr",btn=document.querySelector('[data-sh="'+kind+'"]'),old=btn&&btn.innerHTML;
+ try{if(kind==="copy"){await navigator.clipboard.writeText(colUrl(c));btn.innerHTML="<i>✓</i>"+(tr?"Kopyalandı":"Copied");setTimeout(()=>btn.innerHTML=old,1800);return}
   const b=await cardBlob(c,kind==="story"?1920:1350),f=new File([b],"uluslara-isik-yazi-"+c.n+(kind==="story"?"-story":"")+".png",{type:"image/png"});
   if(kind==="native"){const d={title:tr?c.t:c.te,text:(tr?c.t:c.te)+" — "+c.ref,url:colUrl(c),files:[f]};if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share(d)}else{delete d.files;await navigator.share(d)}return}
-  const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=f.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);btn.textContent=tr?"Kaydedildi ✓":"Saved ✓";setTimeout(()=>btn.textContent=old,2000)}
+  const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=f.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);btn.innerHTML="<i>✓</i>"+(tr?"Kaydedildi":"Saved");setTimeout(()=>btn.innerHTML=old,2000)}
  catch(e){}}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-sh]");if(b)shareCol(b.dataset.sh)});
 function openQA(i){const x=QA[i];
