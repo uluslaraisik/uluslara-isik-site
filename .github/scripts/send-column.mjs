@@ -16,7 +16,13 @@ const url = `https://uluslaraisik.org/yazi/${c.n}`;
 const subject = `${c.t} · Haftalık Yazı ${c.n}`;
 const H = {Authorization: `Token ${KEY}`, "Content-Type": "application/json"};
 const prev = await (await fetch("https://api.buttondown.com/v1/emails?page_size=100", {headers: H})).json();
-if ((prev.results || []).some(e => e.subject === subject)) { console.log("Already sent:", subject); process.exit(0); }
+const ex = (prev.results || []).find(e => e.subject === subject);
+if (ex && ex.status !== "draft") { console.log("Already sent:", subject, ex.status); process.exit(0); }
+if (ex && process.env.DRAFT !== "1") {
+  const r0 = await fetch(`https://api.buttondown.com/v1/emails/${ex.id}`, {method: "PATCH", headers: H, body: JSON.stringify({status: "about_to_send"})});
+  console.log(r0.status, (await r0.text()).slice(0, 200)); process.exit(r0.ok ? 0 : 1);
+}
+if (ex) { console.log("Draft exists:", ex.id); process.exit(0); }
 const body = [
   `![${c.t}](https://uluslaraisik.org/yazi/${c.n}.jpg)`, "",
   `**${c.ref}** · ${c.d}`, "", ...c.p.flatMap(x => [x, ""]),
