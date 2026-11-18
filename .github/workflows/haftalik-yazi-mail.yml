@@ -1,0 +1,25 @@
+name: Haftalık yazı e-postası
+on:
+  schedule:
+    - cron: "0 5 * * 1"   # Monday 08:00 Europe/Istanbul
+  workflow_dispatch:
+    inputs:
+      column_no:
+        description: "Sayı (boş = bugünün yazısı)"
+        required: false
+      draft:
+        description: "1 = sadece taslak oluştur"
+        required: false
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node .github/scripts/send-column.mjs
+        env:
+          BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+          COLUMN_NO: ${{ inputs.column_no }}
+          DRAFT: ${{ inputs.draft }}
