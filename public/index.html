@@ -75,6 +75,10 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;backgroun
 /* hero */
 .hero{position:relative;color:var(--on-dawn);background:linear-gradient(180deg,#10142a 0%,var(--dawn-2) 60%,#3b3456 100%);overflow:hidden}
 .hero canvas{position:absolute;inset:0;width:100%;height:100%}
+.hero.photo{background:#1a1f38 url(img/hero-wide.jpg) 70% center/cover no-repeat}
+.hero.photo::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,16,34,.74) 0%,rgba(12,16,34,.5) 42%,rgba(12,16,34,.08) 72%,rgba(12,16,34,0) 100%),linear-gradient(180deg,rgba(12,16,34,.45) 0%,rgba(12,16,34,0) 28%,rgba(12,16,34,0) 72%,rgba(12,16,34,.45) 100%)}
+@media (max-width:860px){.hero.photo{background-image:url(img/hero-tall.jpg);background-position:center top}.hero.photo::before{background:linear-gradient(180deg,rgba(14,18,38,.55) 0%,rgba(14,18,38,.38) 40%,rgba(14,18,38,.12) 70%,rgba(14,18,38,.3) 100%)}}
+.hero.photo h1,.hero.photo .verse,.hero.photo .eyebrow{text-shadow:0 2px 18px rgba(8,10,24,.55)}.hero.photo .verse{color:#EEF0F7}
 .hero-in{position:relative;display:grid;grid-template-columns:minmax(0,640px) 1fr;gap:28px 40px;align-items:center;padding-block:clamp(56px,9vw,110px) 56px}
 .hero h1{font-size:clamp(40px,7vw,84px);font-weight:800;letter-spacing:-.025em}
 .hero h1 em{font-style:normal;color:var(--sun-2)}
@@ -422,8 +426,7 @@ footer img{width:40px}
   </div>
 </header>
 
-<section class="hero" id="top">
-  <canvas id="rays" aria-hidden="true"></canvas>
+<section class="hero photo" id="top">
   <div class="wrap hero-in">
     <div>
       <p class="eyebrow" style="color:var(--sun-2)"><span data-l="tr">Antalya Uluslara Işık Kilisesi</span><span data-l="en">Antalya Light to the Nations Church</span></p>
@@ -994,6 +997,7 @@ $("#jForm").addEventListener("submit",async e=>{
 
 /* hero: a cross on the horizon of the world, its light washing over the whole sky */
 (function(){
+ if(!$("#rays"))return;
  const c=$("#rays"),x=c.getContext("2d"),reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;let w,h,dpr,G,P=[];
  function geo(){const hr=c.getBoundingClientRect(),sv=document.querySelector(".hero .svc").getBoundingClientRect(),wide=w>860;
   const hy=sv.top-hr.top-(wide?90:24);             // horizon sits just above the question strip
