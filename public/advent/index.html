@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Işık Işık · Advent 2026 · Antalya Uluslara Işık Kilisesi</title>
+<meta name="description" content="Her gün bir söz, bir cümle, bir ışık. Noel'e kadar gökyüzünü birlikte aydınlatıyoruz.">
+<meta property="og:title" content="Işık Işık · Advent 2026">
+<meta property="og:description" content="Her gün bir söz, bir cümle, bir ışık. Noel'e kadar gökyüzünü birlikte aydınlatıyoruz.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://uluslaraisik.org/advent/">
+<meta property="og:image" content="https://uluslaraisik.org/advent/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#070B1D">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+/* Layout: one night sky on top that everyone fills, then a single reading column (Söz → Düşünce → Tek cümle → Dua). Single dark world by choice. */
+:root{
+  color-scheme:dark;
+  --night:#070B1D; --night-2:#0E1430; --panel:#141B3A; --panel-2:#1B2448; --line:#2A3460;
+  --fg:#EEF1FA; --muted:#A3ACCB; --sun:#F58A33; --sun-2:#FFC46B; --sky:#5AAEF2; --gold:#FFE3A6;
+  --f-display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --f-body:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --r:16px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--night);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--sun-2);outline-offset:2px}
+.wrap{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+
+.sky{position:relative;background:var(--night)}
+.sky canvas{display:block;width:100%;height:min(62vh,480px);touch-action:manipulation}
+.sky-head{position:absolute;left:0;right:0;top:0;pointer-events:none}
+.sky-head .wrap{padding-block:18px 0;display:flex;flex-direction:column;gap:4px}
+.brand a{color:inherit;text-decoration:none;pointer-events:auto}.brand a:hover{color:var(--fg)}
+.brand{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(34px,8vw,54px);line-height:1;margin:0;letter-spacing:-.02em}
+h1 i{font-style:normal;display:inline-block;animation:lit .9s both;animation-delay:calc(var(--i)*.16s + .35s)}
+h1 i.g{color:var(--sun-2)}
+@keyframes lit{0%{opacity:.08;filter:blur(3px);text-shadow:none}55%{opacity:1;filter:none;text-shadow:0 0 26px #FFE3A6,0 0 60px rgba(255,196,107,.7)}100%{opacity:1;filter:none;text-shadow:0 0 0 transparent}}
+.sub{color:var(--muted);max-width:30ch;font-size:15px}
+.sky-foot{position:absolute;left:0;right:0;bottom:10px;pointer-events:none}
+.sky-foot .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;font-size:13px;color:var(--muted)}
+.count b{font-family:var(--f-display);font-size:22px;color:var(--fg);font-variant-numeric:tabular-nums}
+.hint{text-align:right}.hint span{white-space:nowrap;display:block}
+
+.pop{position:absolute;z-index:5;max-width:260px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:0 12px 40px rgba(0,0,0,.5);font-size:14px}
+.pop q{font-family:var(--f-serif);font-size:16px;display:block;quotes:"“" "”"}
+.pop .row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px;color:var(--muted);font-size:12px}
+.amin{border:1px solid var(--line);background:var(--panel-2);border-radius:999px;padding:5px 12px;cursor:pointer;font-weight:600;font-size:13px}
+.amin[aria-pressed="true"]{background:var(--sun);border-color:var(--sun);color:#1c1204}
+
+.days{border-block:1px solid var(--line);background:var(--night-2)}
+.days .scroll{display:flex;gap:6px;overflow-x:auto;padding-block:10px;scrollbar-width:thin}
+.day{flex:0 0 auto;width:46px;height:58px;border-radius:12px;border:1px solid var(--line);background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;font-variant-numeric:tabular-nums}
+.day small{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.day b{font-family:var(--f-display);font-size:18px}
+.day i{width:6px;height:6px;border-radius:50%;background:var(--line)}
+.day.done i{background:var(--sun-2);box-shadow:0 0 8px var(--sun-2)}
+.day.sel{background:var(--panel-2);border-color:var(--sun-2)}
+.day:disabled{opacity:.35;cursor:not-allowed}
+.day.sunday b{color:var(--sun-2)}
+
+main.wrap{padding-block:28px 56px;display:flex;flex-direction:column;gap:28px}
+.meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+.chip{border:1px solid var(--line);border-radius:999px;padding:3px 10px;color:var(--sun-2);font-weight:600;letter-spacing:.04em}
+h2{font-family:var(--f-display);font-weight:700;font-size:clamp(26px,6vw,36px);line-height:1.1;margin:6px 0 0;text-wrap:balance;letter-spacing:-.01em}
+section{display:flex;flex-direction:column;gap:10px}
+.step{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.step b{color:var(--sun-2);font-weight:600}
+.scripture{font-family:var(--f-serif);font-size:19px;line-height:1.6;border-left:2px solid var(--sun);padding-left:16px;display:flex;flex-direction:column;gap:10px}
+.scripture p{margin:0}
+.scripture sup{font-family:var(--f-body);font-size:11px;color:var(--sun-2);margin-right:5px;font-weight:600}
+.scripture .ln{display:block}
+.scripture cite{font-family:var(--f-body);font-style:normal;font-size:13px;color:var(--muted)}
+.medit{margin:0;max-width:62ch}
+.ghost{border:1px solid var(--line);background:transparent;border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;color:var(--fg);text-transform:none;letter-spacing:0}
+.answer{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:12px}
+.think{margin:0;color:var(--muted);font-size:15px}
+.think span{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--sun-2);margin-bottom:2px}
+.question{font-family:var(--f-display);font-weight:700;font-size:21px;line-height:1.25;margin:0;text-wrap:balance}
+textarea{width:100%;min-height:76px;resize:vertical;background:var(--night-2);border:1px solid var(--line);border-radius:12px;padding:12px;font-family:var(--f-serif);font-size:18px;line-height:1.4}
+.under{display:flex;flex-wrap:wrap;gap:10px 16px;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted)}
+.vis{display:flex;gap:14px;flex-wrap:wrap}
+.vis label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.vis input{accent-color:var(--sun)}
+.cta{background:var(--sun);color:#1c1204;border:0;border-radius:999px;padding:12px 22px;font-weight:700;font-family:var(--f-display);font-size:17px;cursor:pointer;align-self:flex-start}
+.cta:disabled{opacity:.45;cursor:not-allowed}
+.err{color:#FF9A9A;font-size:13px;margin:0}
+.prayer{font-family:var(--f-serif);font-style:italic;font-size:22px;line-height:1.35;margin:0;color:var(--gold);text-wrap:balance}
+.mine{font-family:var(--f-serif);font-size:20px;margin:0}
+.cardbox{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.cardbox img{width:min(100%,300px);border-radius:14px;border:1px solid var(--line);display:block}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{background:transparent;border:0;padding:6px 14px;cursor:pointer;font-size:13px}
+.seg button[aria-pressed="true"]{background:var(--panel-2);color:var(--sun-2);font-weight:600}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.btn2{border:1px solid var(--line);background:var(--panel-2);border-radius:999px;padding:9px 18px;cursor:pointer;font-weight:600}
+.note{font-size:13px;color:var(--muted);margin:0}
+.locked{text-align:center;padding:40px 0;color:var(--muted)}
+.locked b{display:block;font-family:var(--f-display);font-size:44px;color:var(--fg);font-variant-numeric:tabular-nums}
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+footer .wrap{padding-block:18px 28px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="sky" id="sky">
+  <canvas id="cv" aria-label="Advent gökyüzü: her ışık bir kişinin bugünkü cümlesi"></canvas>
+  <div class="sky-head"><div class="wrap">
+    <div class="brand"><a href="/">‹ Antalya Uluslara Işık Kilisesi</a> · Advent 2026</div>
+    <h1 aria-label="Işık Işık"><i style="--i:0">I</i><i style="--i:1">ş</i><i style="--i:2">ı</i><i style="--i:3">k</i><i style="--i:4">&nbsp;</i><i style="--i:5" class="g">I</i><i style="--i:6" class="g">ş</i><i style="--i:7" class="g">ı</i><i style="--i:8" class="g">k</i></h1>
+    <div class="sub">Her gün bir söz, bir cümle, bir ışık. Noel'e kadar gökyüzünü birlikte aydınlatıyoruz.</div>
+  </div></div>
+  <div class="sky-foot"><div class="wrap">
+    <div class="count"><b id="cnt">0</b><br>ışık yandı</div>
+    <div class="hint"><span>Bir ışığa dokun, cümlesini oku.</span><span>Büyük ışıklar senin.</span></div>
+  </div></div>
+  <div class="pop" id="pop" hidden></div>
+</div>
+
+<nav class="days" aria-label="Günler"><div class="wrap"><div class="scroll" id="days"></div></div></nav>
+
+<main class="wrap" id="main"></main>
+
+<footer><div class="wrap">Kutsal Kitap metinleri: Kutsal Kitap Yeni Çeviri. · Adın ve iletişim bilgin istenmez; cümleler isimsiz paylaşılır.</div></footer>
+
+<script>
+const DAYS = [{"d":"2026-11-29","w":1,"ref":"Yeşaya 9:2, 6-7","cv":"Karanlıkta yürüyen halk Büyük bir ışık görecek; Ölümün gölgelediği diyarda Yaşayanların üzerine ışık parlayacak.","t":"Karanlıkta bir ışık","m":"Yeşaya bu sözleri söylediğinde halk savaşın, korkunun ve belirsizliğin gölgesinde yaşıyordu. Tanrı onlara bir strateji ya da güçlü bir ordu vaat etmedi; bir çocuk vaat etti. Işık, karanlığın içinden bizim çabamızla doğmaz; dışarıdan, Tanrı'dan gelir. Advent, bu vaadi yüzyıllarca bekleyenlerin yanında durduğumuz zamandır. Beklemeye karanlığımızı saklayarak değil, onu ışığa getirerek başlarız.","q":"Bugün hayatının hangi köşesinde ışığa ihtiyacın var?","p":"Rab, karanlığıma ışığınla gel.","verses":[{"n":"2","l":["Karanlıkta yürüyen halk","Büyük bir ışık görecek;","Ölümün gölgelediği diyarda","Yaşayanların üzerine ışık parlayacak."]},{"n":"6","l":["Çünkü bize bir çocuk doğacak,","Bize bir oğul verilecek.","Yönetim onun omuzlarında olacak.","Onun adı Harika Öğütçü, Güçlü Tanrı,","Ebedi Baba, Esenlik Önderi olacak."]},{"n":"7","l":["Davut'un tahtı ve ülkesi üzerinde egemenlik sürecek.","Egemenliğinin ve esenliğinin büyümesi son bulmayacak.","Egemenliğini adaletle, doğrulukla kuracak","Ve sonsuza dek sürdürecek.","Her Şeye Egemen RAB'bin gayreti bunu sağlayacak."]}],"wt":"Umut","y":"Işığın ulaşmasını istediğin bir kişi ya da yer için tek cümlelik bir dua yaz."},{"d":"2026-11-30","w":1,"ref":"Yaratılış 3:8-9, 15","cv":"RAB Tanrı Adem'e, “Neredesin?” diye seslendi.","t":"Neredesin?","m":"İlk günahın ardından insan Tanrı'dan kaçıp saklandı. Ama Tanrı onu aramaya geldi ve ilk sorusu bir suçlama değil, bir çağrıydı: “Neredesin?” Aynı gün, kötülüğün başını ezecek Olan'ın geleceğini de bildirdi. Noel'in hikâyesi Beytlehem'de değil, bu bahçede başlar: kaçan insanın peşinden gelen Tanrı'yla. O gün bugündür arayan biz değiliz; aranan biziz.","q":"Tanrı bugün sana “Neredesin?” diye sorsa, O'na ne derdin?","p":"Rab, saklandığım yerde beni bulduğun için sana şükrederim.","verses":[{"n":"8","l":["Derken, günün serinliğinde bahçede yürüyen RAB Tanrı'nın sesini duydular. O'ndan kaçıp ağaçların arasına gizlendiler."]},{"n":"9","l":["RAB Tanrı Adem'e, “Neredesin?” diye seslendi."]},{"n":"15","l":["Seninle kadını, onun soyuyla senin soyunu","Birbirinize düşman edeceğim.","Onun soyu senin başını ezecek,","Sen onun topuğuna saldıracaksın.”"]}],"wt":"Umut","y":"Seni arayıp bulan Tanrı'ya tek cümleyle teşekkür et."},{"d":"2026-12-01","w":1,"ref":"Yaratılış 12:1-3","cv":"Yeryüzündeki bütün halklar Senin aracılığınla kutsanacak.","t":"Bütün halklar için","m":"Tanrı, Avram'ı bildiği her şeyi bırakmaya çağırdı ve ona yalnızca bir söz verdi. Bu söz tek bir aileye değil, yeryüzündeki bütün halklara uzanıyordu. Yüzyıllar sonra İbrahim'in soyundan doğan İsa'da bu bereket Antalya'ya, bize kadar ulaştı. Avram vaadin gerçekleştiğini görmeden yola çıktı; umut, sonucu görmeden Tanrı'nın sözüne güvenmektir. Bereket ise bizde kalsın diye değil, bizden başkalarına aksın diye verilir.","q":"Tanrı'nın sana verdiği hangi iyiliği bugün başka biriyle paylaşabilirsin?","p":"Rab, beni çevremdekiler için bereket kaynağı yap.","verses":[{"n":"1","l":["RAB Avram'a, “Ülkeni, akrabalarını, baba evini bırak, sana göstereceğim ülkeye git” dedi,"]},{"n":"2","l":["“Seni büyük bir ulus yapacağım,","Seni kutsayacak, sana ün kazandıracağım,","Bereket kaynağı olacaksın."]},{"n":"3","l":["Seni kutsayanları kutsayacak,","Seni lanetleyeni lanetleyeceğim.","Yeryüzündeki bütün halklar","Senin aracılığınla kutsanacak.”"]}],"wt":"Umut","y":"Bugün birine söylemek istediğin bir bereket sözü yaz."},{"d":"2026-12-02","w":1,"ref":"2. Samuel 7:12-13, 16","cv":"Soyun ve krallığın sonsuza dek önümde duracak; tahtın sonsuza dek sürecektir.","t":"Sonsuza dek sürecek taht","m":"Davut Tanrı'ya bir ev yapmak istedi; Tanrı ise Davut'a bir ev, yani sonsuza dek sürecek bir soy vaat etti. Davut'tan sonra gelen kralların çoğu halkı hayal kırıklığına uğrattı, sonunda taht da yıkıldı. Yine de Tanrı sözünü unutmadı. İnsanların kurduğu her düzen bir gün sarsılır; Tanrı'nın vaat ettiği Kral'ın egemenliği ise son bulmaz. Advent'te, güvenimizi geçici olandan kalıcı olana çevirmeyi öğreniriz.","q":"Sarsıldığında seni en çok korkutan, güvendiğin şey nedir?","p":"Rab, güvenimi sarsılmayan egemenliğine bağlıyorum.","verses":[{"n":"12","l":["Sen ölüp atalarına kavuşunca, senden sonra soyundan birini ortaya çıkarıp krallığını pekiştireceğim."]},{"n":"13","l":["Adıma bir tapınak kuracak olan odur. Ben de onun krallığının tahtını sonsuza dek sürdüreceğim."]},{"n":"16","l":["Soyun ve krallığın sonsuza dek önümde duracak; tahtın sonsuza dek sürecektir.’ ”"]}],"wt":"Umut","y":"Sarsılmayan Kral'a güvenini tek cümleyle ilan et."},{"d":"2026-12-03","w":1,"ref":"Yeşaya 11:1-2, 10","cv":"İşay'ın kütüğünden yeni bir filiz çıkacak, Kökünden bir fidan meyve verecek.","t":"Kütükten çıkan filiz","m":"Kesilmiş bir ağaçtan geriye yalnızca kütük kalır; Davut'un soyu da öyle görünüyordu. Ama Tanrı, bitti denilen yerden yeni bir filiz çıkaracağını söyledi. Bu filiz gösterişle değil, Rab'bin Ruhu'yla gelecek ve bütün uluslar ona yönelecekti. Tanrı'nın işi çoğu zaman küçük, sessiz ve gözden kaçacak kadar sade başlar. Umut, kütüğe bakıp filizi bekleyebilmektir.","q":"Hayatında “artık bitti” dediğin hangi konuda Tanrı'dan yeni bir filiz bekliyorsun?","p":"Rab, kuruyan yerlerimde yeni yaşam filizlendir.","verses":[{"n":"1","l":["İşay'ın kütüğünden yeni bir filiz çıkacak,","Kökünden bir fidan meyve verecek."]},{"n":"2","l":["RAB'bin Ruhu, bilgelik ve anlayış ruhu,","Öğüt ve güç ruhu, bilgi ve RAB korkusu ruhu","Onun üzerinde olacak."]},{"n":"10","l":["O gün İşay'ın kökü ortaya çıkacak,","Halklara sancak olacak,","Uluslar ona yönelecek.","Kaldığı yer görkemli olacak."]}],"wt":"Umut","y":"Tanrı'nın yeniden yeşerteceğine inandığın şey için bir umut cümlesi yaz."},{"d":"2026-12-04","w":1,"ref":"Mika 5:2, 4","cv":"Ama sen, ey Beytlehem Efrata, Yahuda boyları arasında önemsiz olduğun halde, İsrail'i benim adıma yönetecek olan senden çıkacak.","t":"Küçük Beytlehem","m":"Kurtarıcı'nın başkentte, bir sarayda doğması beklenirdi. Tanrı ise Yahuda'nın en önemsiz kasabalarından birini seçti. Mika'nın bu sözü İsa'nın doğumundan yaklaşık yedi yüz yıl önce söylendi. Tanrı büyük işlerini küçük yerlerde, kimsenin bakmadığı köşelerde başlatmayı sever. Küçük ve önemsiz görünmek, O'nun gözünde bir engel değildir.","q":"Kendini küçük ya da önemsiz hissettiğin hangi alanda Tanrı'nın çalışabileceğine inanmak istiyorsun?","p":"Rab, küçüklüğümü senin eline bırakıyorum.","verses":[{"n":"2","l":["Ama sen, ey Beytlehem Efrata,","Yahuda boyları arasında önemsiz olduğun halde,","İsrail'i benim adıma yönetecek olan senden çıkacak.","Onun kökeni öncesizliğe, zamanın başlangıcına dayanır."]},{"n":"4","l":["O gelince, halkını RAB'den aldığı güçle","Tanrısı RAB'bin görkemli adına yönetecek.","Halk güvenlik içinde yaşayacak.","Çünkü bütün dünya onun büyüklüğünü kabul edecek."]}],"wt":"Umut","y":"Tanrı'nın küçük şeylerle yaptığı büyük bir iş için şükret."},{"d":"2026-12-05","w":1,"ref":"Mezmur 130:5-8","cv":"Sabahı gözleyenlerden, Evet, sabahı gözleyenlerden daha çok, Canım Rab'bi gözlüyor.","t":"Sabahı gözleyenler gibi","m":"Gece nöbeti tutan biri sabahın geleceğinden kuşku duymaz; yalnızca ne zaman geleceğini bilmez. Mezmur yazarı Rab'bi işte böyle bekler: kesin ama sabırlı bir güvenle. Beklemek, hiçbir şey yapmamak değildir; gözünü doğru yöne çevirmektir. Umudun dayanağı koşulların düzelmesi değil, Rab'bin sözü ve O'ndaki tam kurtuluştur. Umut haftasını bu duayla kapatıyoruz: sabah gelecek.","q":"Şu sıralar Tanrı'dan neyi sabırla bekliyorsun?","p":"Rab, sabahı gözleyen nöbetçi gibi seni bekliyorum.","verses":[{"n":"5","l":["RAB'bi gözlüyorum,","Canım RAB'bi gözlüyor,","Umut bağlıyorum O'nun sözüne."]},{"n":"6","l":["Sabahı gözleyenlerden,","Evet, sabahı gözleyenlerden daha çok,","Canım Rab'bi gözlüyor."]},{"n":"7","l":["Ey İsrail, RAB'be umut bağla!","Çünkü RAB'de sevgi,","Tam kurtuluş vardır."]},{"n":"8","l":["İsrail'i bütün suçlarından","Fidyeyle O kurtaracaktır."]}],"wt":"Umut","y":"Bekleyen birine umut verecek tek bir cümle yaz."},{"d":"2026-12-06","w":2,"ref":"Yeşaya 40:1, 3-5","cv":"“Çölde RAB'bin yolunu hazırlayın, Bozkırda Tanrımız için düz bir yol açın.”","t":"Yolu hazırlayın","m":"Sürgündeki halka ilk söz bir azar değil, bir tesellidir: “Avutun halkımı.” Ardından bir çağrı gelir: Rab geliyor, yolunu hazırlayın. Eskiden bir kral gelmeden önce yollar düzeltilir, çukurlar doldurulurdu. Bizim yüreğimizde de gururdan tepeler, umutsuzluktan vadiler vardır. Esenlik, Rab'bin gelişine engel olan şeyleri O'nun önünden kaldırmakla başlar.","q":"Rab'bin sana yaklaşmasını zorlaştıran, yüreğindeki “engebe” nedir?","p":"Rab, yüreğimde sana düz bir yol aç.","verses":[{"n":"1","l":["“Avutun halkımı” diyor Tanrınız,","“Avutun!"]},{"n":"3","l":["Şöyle haykırıyor bir ses:","“Çölde RAB'bin yolunu hazırlayın,","Bozkırda Tanrımız için düz bir yol açın."]},{"n":"4","l":["Her vadi yükseltilecek,","Her dağ, her tepe alçaltılacak.","Böylelikle engebeler düzleştirilecek,","Sarp yerler ovaya dönüştürülecek."]},{"n":"5","l":["O zaman RAB'bin yüceliği görünecek,","Bütün insanlar hep birlikte onu görecek.","Bunu söyleyen RAB'dir.”"]}],"wt":"Esenlik","y":"Rab'be “gel” diyen tek cümlelik bir davet yaz."},{"d":"2026-12-07","w":2,"ref":"Malaki 3:1; 4:2","cv":"Ama siz, adıma saygı gösterenler için ışınlarıyla şifa getiren doğruluk güneşi doğacak.","t":"Sessizlikten önceki son söz","m":"Malaki, Eski Antlaşma'nın son peygamberidir. Ondan sonra yaklaşık dört yüz yıl boyunca yeni bir peygamber sesi duyulmadı. Halk bu uzun sessizliğe iki vaatle girdi: bir haberci gelecek ve doğruluk güneşi doğacaktı. Tanrı'nın sessizliği, O'nun yokluğu ya da unutması demek değildir. Vaat edilen şafak, en uzun gecenin sonunda söker.","q":"Tanrı'nın sessiz kaldığını düşündüğün bir dönemde seni ne ayakta tuttu?","p":"Rab, sessizliğinde de sözüne güvenmeyi öğret.","verses":[{"n":"1","l":["“İşte habercimi gönderiyorum. Önümde yolu hazırlayacak. Aradığınız Rab ansızın tapınağına gelecek; görmeyi özlediğiniz antlaşma habercisi gelecek” diyor Her Şeye Egemen RAB."]},{"n":"2","l":["Ama siz, adıma saygı gösterenler için ışınlarıyla şifa getiren doğruluk güneşi doğacak. Ve çıkıp ahırdan salınmış buzağılar gibi sıçrayacaksınız."]}],"wt":"Esenlik","y":"Tanrı'nın tuttuğu bir sözü hatırla ve tek cümleyle yaz."},{"d":"2026-12-08","w":2,"ref":"Luka 1:5-7, 13","cv":"Melek, “Korkma, Zekeriya” dedi, “Duan kabul edildi.”","t":"Duan kabul edildi","m":"Zekeriya ile Elizabet Tanrı'nın gözünde doğru kişilerdi, yine de yıllarca çocuk özlemiyle yaşadılar. Sadık olmak, acıdan muaf olmak anlamına gelmez. Belki bu dua için artık çok geç olduğunu düşünüyorlardı. Ama melek, “Duan kabul edildi” dedi; Tanrı o duayı hiç unutmamıştı. O'nun zamanlaması bizimkine uymayabilir, ama hiçbir dua O'nun önünde kaybolmaz.","q":"Uzun zamandır ettiğin, belki de artık bıraktığın dua hangisi?","p":"Rab, unuttuğumu sandığım dualarımı sen unutmadın; sana şükrederim.","verses":[{"n":"5","l":["Yahudiye Kralı Hirodes zamanında, Aviya bölüğünden Zekeriya adında bir kâhin vardı. Harun soyundan gelen karısının adı ise Elizabet'ti."]},{"n":"6","l":["Her ikisi de Tanrı'nın gözünde doğru kişilerdi, Rab'bin bütün buyruk ve kurallarına eksiksizce uyarlardı."]},{"n":"7","l":["Elizabet kısır olduğu için çocukları olmuyordu. İkisinin de yaşı ilerlemişti."]},{"n":"13","l":["Melek, “Korkma, Zekeriya” dedi, “Duan kabul edildi. Karın Elizabet sana bir oğul doğuracak, adını Yahya koyacaksın."]}],"wt":"Esenlik","y":"Yanıtlanan bir duan için tek cümleyle şükret."},{"d":"2026-12-09","w":2,"ref":"Luka 1:18-20","cv":"Ben Tanrı'nın huzurunda duran Cebrail'im. Seninle konuşmak ve bu müjdeyi sana bildirmek için gönderildim.","t":"Sessizlik okulu","m":"Zekeriya bir kâhindi, yıllarca dua etmişti; ama yanıt geldiğinde inanamadı. Dokuz ay boyunca konuşamadı. Bu yalnızca bir ceza değil, aynı zamanda bir hazırlıktı: konuşamayan insan dinlemeyi öğrenir. Bizim günlerimiz de sesle, ekranla ve aceleyle dolu. Advent, susup Tanrı'nın sözünün içimizde yer etmesine izin verdiğimiz zamandır.","q":"Bugün Tanrı'yı dinlemek için neyi birkaç dakikalığına susturabilirsin?","p":"Rab, susmayı ve seni dinlemeyi öğret.","verses":[{"n":"18","l":["Zekeriya meleğe, “Bundan nasıl emin olabilirim?” dedi. “Çünkü ben yaşlandım, karımın da yaşı ilerledi.”"]},{"n":"19","l":["Melek ona şöyle karşılık verdi: “Ben Tanrı'nın huzurunda duran Cebrail'im. Seninle konuşmak ve bu müjdeyi sana bildirmek için gönderildim."]},{"n":"20","l":["İşte, belirlenen zamanda yerine gelecek olan sözlerime inanmadığın için dilin tutulacak, bunların gerçekleşeceği güne dek konuşamayacaksın.”"]}],"wt":"Esenlik","y":"Sessizlikte Tanrı'dan duymak istediğin sözü tek cümleyle yaz."},{"d":"2026-12-10","w":2,"ref":"Luka 1:76-79","cv":"Yücelerden doğan Güneş, Karanlıkta ve ölümün gölgesinde yaşayanlara ışık saçmak Ve ayaklarımızı esenlik yoluna yöneltmek üzere Yardımımıza gelecektir.","t":"Esenlik yoluna","m":"Dokuz aylık sessizliğin ardından Zekeriya'nın ağzından çıkan ilk sözler övgüdür. Oğlu Yahya yolu hazırlayacak, ama asıl ışık “yücelerden doğan Güneş”tir. Zekeriya'ya göre kurtuluş, günahların bağışlanmasıyla gelir. Esenlik, yani Tanrı'yla barış, sorunların yokluğu değil, önce bağışlanmaktır. Bu ışık bize yalnızca yolu göstermez, ayaklarımızı o yola yöneltir.","q":"Bugün esenliğe en çok hangi konuda ihtiyaç duyuyorsun?","p":"Rab, ayaklarımı esenlik yoluna yönelt.","verses":[{"n":"76-77","l":["Sen de, ey çocuk,","Yüceler Yücesi'nin peygamberi diye anılacaksın.","Rab'bin yollarını hazırlamak üzere önünden gidecek","Ve O'nun halkına,","Günahlarının bağışlanmasıyla kurtulacaklarını bildireceksin."]},{"n":"78-79","l":["Çünkü Tanrımız'ın yüreği merhamet doludur.","O'nun merhameti sayesinde,","Yücelerden doğan Güneş,","Karanlıkta ve ölümün gölgesinde yaşayanlara ışık saçmak","Ve ayaklarımızı esenlik yoluna yöneltmek üzere","Yardımımıza gelecektir.”"]}],"wt":"Esenlik","y":"Birinin hayatına esenlik dileyen tek cümlelik bir dua yaz."},{"d":"2026-12-11","w":2,"ref":"Luka 3:3-6","cv":"Ve bütün insanlar Tanrı'nın sağladığı kurtuluşu görecektir.","t":"Çölde bir ses","m":"Yahya sarayda ya da tapınakta değil, çölde seslendi. Çağrısı yalındı: tövbe edin, yani geri dönün. Tövbe kendimizi cezalandırmak değil, yönümüzü yeniden Tanrı'ya çevirmektir. Yol böyle hazırlanır ve amaç bellidir: bütün insanlar Tanrı'nın sağladığı kurtuluşu görsün. İsa'yı karşılamaya hazırlanmanın en gerçek yolu, O'na dürüstçe dönmektir.","q":"Bu Advent'te hangi konuda yönünü yeniden Tanrı'ya çevirmek istiyorsun?","p":"Rab, yönümü yeniden sana çeviriyorum.","verses":[{"n":"3","l":["O da Şeria Irmağı'nın çevresindeki bütün bölgeyi dolaşarak insanları, günahlarının bağışlanması için tövbe edip vaftiz olmaya çağırdı."]},{"n":"4","l":["Nitekim Peygamber Yeşaya'nın sözlerini içeren kitapta şöyle yazılmıştır:","“Çölde haykıran,","‘Rab'bin yolunu hazırlayın,","Geçeceği patikaları düzleyin’ diye sesleniyor."]},{"n":"5","l":["‘Her vadi doldurulacak,","Her dağ ve her tepe alçaltılacak.","Dolambaçlı yollar doğrultulacak,","Engebeli yollar düzleştirilecek."]},{"n":"6","l":["Ve bütün insanlar","Tanrı'nın sağladığı kurtuluşu görecektir.’ ”"]}],"wt":"Esenlik","y":"“Rab, sana dönüyorum…” diye başlayan bir cümle yaz."},{"d":"2026-12-12","w":2,"ref":"Yeşaya 2:2, 4-5","cv":"Ey Yakup soyu, gelin RAB'bin ışığında yürüyelim.","t":"Kılıçlardan saban demirine","m":"Yeşaya, ulusların akın akın Rab'be geldiği ve savaş aletlerinin tarım aletine dönüştüğü bir gün görür. Bu esenlik, insanların anlaşmasıyla değil, Rab'bin aralarında yargıçlık etmesiyle gelir. Esenlik Önderi geldi; bu barışın tamamı ise O'nun dönüşüyle görülecek. O güne dek çağrımız açıktır: “Gelin RAB'bin ışığında yürüyelim.” Barış, elimizdeki “kılıcı”, yani kırgınlığı, öfkeyi ve sert sözü bırakmakla başlar.","q":"Kiminle arandaki kırgınlığı bırakıp barışa doğru bir adım atabilirsin?","p":"Rab, beni esenliğinin aracı yap.","verses":[{"n":"2","l":["RAB'bin Tapınağı'nın kurulduğu dağ,","Son günlerde dağların en yücesi,","Tepelerin en yükseği olacak.","Oraya akın edecek ulusların hepsi."]},{"n":"4","l":["RAB uluslar arasında yargıçlık edecek,","Birçok halkın arasındaki anlaşmazlıkları çözecek.","İnsanlar kılıçlarını çekiçle dövüp saban demiri,","Mızraklarını bağcı bıçağı yapacaklar.","Ulus ulusa kılıç kaldırmayacak,","Savaş eğitimi yapmayacaklar artık."]},{"n":"5","l":["Ey Yakup soyu, gelin RAB'bin ışığında yürüyelim."]}],"wt":"Esenlik","y":"Bugün atacağın bir barış adımını tek cümleyle yaz."},{"d":"2026-12-13","w":3,"ref":"Luka 1:26-28, 30-33","cv":"“Selam, ey Tanrı'nın lütfuna erişen kız! Rab seninledir”","t":"Korkma, Meryem","m":"Melek Yeruşalim'e, tapınağa değil; Nasıra gibi küçük bir kente, sıradan bir genç kıza geldi. Meryem'in özel bir unvanı yoktu; ona verilen şey lütuftu, yani hak edilmeden gelen iyilik. Meleğin haberi büyüktü: Davut'a vaat edilen, sonu gelmeyecek egemenlik bu çocukta gerçekleşecekti. Haftalardır okuduğumuz bütün vaatler tek bir isimde buluşuyor: İsa. Gerçek sevinç, Tanrı'nın bize yaklaştığını duymakla başlar.","q":"“Rab seninledir” sözü bugün senin için ne anlama geliyor?","p":"Rab, bana yaklaştığın için sevinçle sana şükrederim.","verses":[{"n":"26-27","l":["Elizabet'in hamileliğinin altıncı ayında Tanrı, Melek Cebrail'i Celile'de bulunan Nasıra adlı kente, Davut'un soyundan Yusuf adındaki adamla nişanlı kıza gönderdi. Kızın adı Meryem'di."]},{"n":"28","l":["Onun yanına giren melek, “Selam, ey Tanrı'nın lütfuna erişen kız! Rab seninledir” dedi."]},{"n":"30","l":["Ama melek ona, “Korkma Meryem” dedi, “Sen Tanrı'nın lütfuna eriştin."]},{"n":"31","l":["Bak, gebe kalıp bir oğul doğuracak, adını İsa koyacaksın."]},{"n":"32","l":["O büyük olacak, kendisine ‘Yüceler Yücesi'nin Oğlu’ denecek. Rab Tanrı O'na, atası Davut'un tahtını verecek."]},{"n":"33","l":["O da sonsuza dek Yakup'un soyu üzerinde egemenlik sürecek, egemenliğinin sonu gelmeyecektir.”"]}],"wt":"Sevinç","y":"“Rab benimle, bu yüzden…” cümlesini tamamla."},{"d":"2026-12-14","w":3,"ref":"Luka 1:34-38","cv":"Tanrı'nın yapamayacağı hiçbir şey yoktur.","t":"Bana dediğin gibi olsun","m":"Meryem'in sorusu kuşkudan değil, anlamak isteyen bir imandan doğdu. Önündeki yol kolay değildi: nişanlısı, ailesi ve bütün kasaba ne diyecekti? Melek ona her şeyi açıklamadı; yalnızca şunu söyledi: “Tanrı'nın yapamayacağı hiçbir şey yoktur.” Meryem'in yanıtı kısa ve tamdı: “Bana dediğin gibi olsun.” İman, her şeyi anlamak değil, sözü veren Tanrı'ya güvenmektir.","q":"Hangi konuda Tanrı'ya “dediğin gibi olsun” demek sana zor geliyor?","p":"Rab, ben senin kulunum; bana dediğin gibi olsun.","verses":[{"n":"34","l":["Meryem meleğe, “Bu nasıl olur? Ben erkeğe varmadım ki” dedi."]},{"n":"35","l":["Melek ona şöyle yanıt verdi: “Kutsal Ruh senin üzerine gelecek, Yüceler Yücesi'nin gücü sana gölge salacak. Bunun için doğacak olana kutsal, Tanrı Oğlu denecek."]},{"n":"36","l":["Bak, senin akrabalarından Elizabet de yaşlılığında bir oğula gebe kaldı. Kısır bilinen bu kadın şimdi altıncı ayındadır."]},{"n":"37","l":["Tanrı'nın yapamayacağı hiçbir şey yoktur.”"]},{"n":"38","l":["“Ben Rab'bin kuluyum” dedi Meryem, “Bana dediğin gibi olsun.” Bundan sonra melek onun yanından ayrıldı."]}],"wt":"Sevinç","y":"Tanrı'ya kendi “evet”ini tek cümleyle yaz."},{"d":"2026-12-15","w":3,"ref":"Luka 1:39-45","cv":"İman eden kadına ne mutlu! Çünkü Rab'bin ona söylediği sözler gerçekleşecektir.","t":"Paylaşılan sevinç","m":"Meryem bu büyük haberi tek başına taşımadı; aceleyle Elizabet'in yanına gitti. Biri genç, biri yaşlı iki kadın, Tanrı'nın işini birbirinin hayatında gördü ve sevindi. Henüz doğmamış Yahya bile sevinçle hopladı. İman tek başına yaşanmak için verilmemiştir; sevinç paylaşıldıkça büyür. Tanrı bizi birbirimizin imanını güçlendirelim diye bir araya getirir.","q":"İmanında seni yüreklendiren biri kim? Ona bugün nasıl teşekkür edebilirsin?","p":"Rab, yanıma koyduğun kardeşlerim için sana şükrederim.","verses":[{"n":"39","l":["O günlerde Meryem kalkıp aceleyle Yahuda'nın dağlık bölgesindeki bir kente gitti."]},{"n":"40","l":["Zekeriya'nın evine girip Elizabet'i selamladı."]},{"n":"41-42","l":["Elizabet Meryem'in selamını duyunca rahmindeki çocuk hopladı. Kutsal Ruh'la dolan Elizabet yüksek sesle şöyle dedi: “Kadınlar arasında kutsanmış bulunuyorsun, rahminin ürünü de kutsanmıştır!"]},{"n":"43","l":["Nasıl oldu da Rabbim'in annesi yanıma geldi?"]},{"n":"44","l":["Bak, selamın kulaklarıma eriştiği an, çocuk rahmimde sevinçle hopladı."]},{"n":"45","l":["İman eden kadına ne mutlu! Çünkü Rab'bin ona söylediği sözler gerçekleşecektir.”"]}],"wt":"Sevinç","y":"İmanında seni yüreklendiren biri için şükret (adını yazmadan)."},{"d":"2026-12-16","w":3,"ref":"Luka 1:46-50","cv":"“Canım Rab'bi yüceltir; Ruhum, Kurtarıcım Tanrı sayesinde sevinçle coşar.”","t":"Canım Rab'bi yüceltir","m":"Meryem'in koşulları değişmemişti: hâlâ yoksul, genç ve belirsiz bir geleceğin eşiğindeydi. Yine de ezgi söyledi, çünkü sevincinin kaynağı durumu değil, Kurtarıcısı'ydı. Tanrı'nın, kendisi gibi sıradan biriyle ilgilendiğini gördü. Sevinç ile mutluluk aynı şey değildir: mutluluk koşullara bağlıdır, sevinç Tanrı'nın kim olduğuna. Bu yüzden zor günlerde bile ezgi söylenebilir.","q":"Tanrı'nın bu yıl senin için yaptığı “büyük iş” nedir?","p":"Canım seni yüceltir, Rab; benim için büyük işler yaptın.","verses":[{"n":"46-47","l":["Meryem de şöyle dedi:","“Canım Rab'bi yüceltir;","Ruhum, Kurtarıcım Tanrı sayesinde sevinçle coşar."]},{"n":"48","l":["Çünkü O, sıradan biri olan kuluyla ilgilendi.","İşte, bundan böyle bütün kuşaklar beni mutlu sayacak."]},{"n":"49","l":["Çünkü Güçlü Olan, benim için büyük işler yaptı.","O'nun adı kutsaldır."]},{"n":"50","l":["Kuşaklar boyunca kendisinden korkanlara merhamet eder."]}],"wt":"Sevinç","y":"“Canım Rab'bi yüceltir, çünkü…” cümlesini tamamla."},{"d":"2026-12-17","w":3,"ref":"Matta 1:18-21","cv":"Adını İsa koyacaksın. Çünkü halkını günahlarından O kurtaracak.","t":"Yusuf'un sessiz itaati","m":"Yusuf'un planları bir anda altüst oldu. Yine de öfkeyle değil, merhametle davranmayı seçti; Meryem'i utandırmak istemedi. Sonra melek ona çocuğun adını bildirdi: İsa, yani “Rab kurtarır.” Bu çocuk halkını yalnızca zorluklardan değil, günahlarından kurtaracaktı; asıl ihtiyacımız da budur. Müjde'de Yusuf'un tek bir sözü bile yazılı değildir; onu itaatinden tanırız.","q":"Planların bozulduğunda Tanrı'ya güvenmek sana ne zaman zor geldi?","p":"Rab İsa, beni günahlarımdan kurtardığın için sana şükrederim.","verses":[{"n":"18","l":["İsa Mesih'in doğumu şöyle oldu: Annesi Meryem, Yusuf'la nişanlıydı. Ama birlikte olmalarından önce Meryem'in Kutsal Ruh'tan gebe olduğu anlaşıldı."]},{"n":"19","l":["Nişanlısı Yusuf, doğru bir adam olduğu ve onu herkesin önünde utandırmak istemediği için ondan sessizce ayrılmak niyetindeydi."]},{"n":"20","l":["Ama böyle düşünmesi üzerine Rab'bin bir meleği rüyada ona görünerek şöyle dedi: “Davut oğlu Yusuf, Meryem'i kendine eş olarak almaktan korkma. Çünkü onun rahminde oluşan, Kutsal Ruh'tandır."]},{"n":"21","l":["Meryem bir oğul doğuracak. Adını İsa koyacaksın. Çünkü halkını günahlarından O kurtaracak.”"]}],"wt":"Sevinç","y":"İsa'nın seni neyden kurtardığını tek cümleyle anlat."},{"d":"2026-12-18","w":3,"ref":"Matta 1:22-24","cv":"İmmanuel, Tanrı bizimle demektir.","t":"İmmanuel","m":"İmmanuel, “Tanrı bizimle” demektir. Tanrı bize uzaktan bir mesaj ya da yalnızca bir elçi göndermedi; kendisi geldi. Aden bahçesinde insan Tanrı'dan saklanmıştı; Beytlehem'de Tanrı insanın yanına geldi. Yusuf uyandığında korkuları ortadan kalkmamıştı, ama artık yalnız olmadığını biliyordu. Hristiyan sevincinin özü, sorunların yokluğu değil, Tanrı'nın varlığıdır.","q":"Tanrı'nın seninle olduğunu en çok hangi anda hissetmeye ihtiyacın var?","p":"İmmanuel, benimle olduğun için sana şükrederim.","verses":[{"n":"22","l":["Bütün bunlar, Rab'bin peygamber aracılığıyla bildirdiği şu söz yerine gelsin diye oldu:"]},{"n":"23","l":["“İşte, kız gebe kalıp bir oğul doğuracak; adını İmmanuel koyacaklar.” İmmanuel, Tanrı bizimle demektir."]},{"n":"24","l":["Yusuf uyanınca Rab'bin meleğinin buyruğuna uydu ve Meryem'i eş olarak yanına aldı."]}],"wt":"Sevinç","y":"“Tanrı benimle; bugün…” cümlesini tamamla."},{"d":"2026-12-19","w":3,"ref":"Sefanya 3:14-17","cv":"Tanrın RAB, o güçlü Kurtarıcı seninle. Alabildiğine sevinecek senin için, Sevgisiyle seni yenileyecek, ezgilerle coşacak.","t":"Senin için sevinen Tanrı","m":"Çoğumuz Tanrı'yı kaşları çatık, bize zar zor katlanan biri gibi düşünürüz. Sefanya ise bambaşka bir Tanrı'yı tanıtır: halkı için ezgilerle coşan bir Tanrı. Bu sevincin nedeni bizim kusursuzluğumuz değil, O'nun cezamızı kaldırmış olmasıdır. Sevinç haftası boyunca Tanrı'da sevinmeyi konuştuk; bugün daha derin bir gerçeği görüyoruz. Bizim sevincimiz, O'nun bizim için duyduğu sevincin yankısıdır.","q":"Tanrı'nın senin için sevindiğini bilmek, O'na bakışını nasıl değiştiriyor?","p":"Rab, sevginle beni yenile.","verses":[{"n":"14","l":["Ey Siyon kızı, ezgiler söyle!","Ey İsrail, haykır!","Yürekten sevin, sevinçle coş,","Ey Yeruşalim kızı!"]},{"n":"15","l":["RAB senin cezanı kaldırdı,","Kovdu düşmanlarını.","İsrail'in Kralı RAB seninle.","Korkma artık kötülükten."]},{"n":"16","l":["O gün Yeruşalim'e denecek ki,","“Korkma, ey Siyon, gevşemesin ellerin."]},{"n":"17","l":["Tanrın RAB, o güçlü Kurtarıcı seninle.","Alabildiğine sevinecek senin için,","Sevgisiyle seni yenileyecek, ezgilerle coşacak.”"]}],"wt":"Sevinç","y":"Tanrı'nın senin için sevindiğini bilmenin sevincini tek cümleyle yaz."},{"d":"2026-12-20","w":4,"ref":"1. Yuhanna 4:9-11","cv":"O bizi sevdi ve Oğlu'nu günahlarımızı bağışlatan kurban olarak dünyaya gönderdi. İşte sevgi budur.","t":"İşte sevgi budur","m":"Sevgiyi çoğu zaman bir duygu olarak tanımlarız; Kutsal Kitap ise onu bir olayla tanımlar: Tanrı Oğlu'nu gönderdi. Üstelik sevgiyi başlatan biz değildik. Biz O'nu aramazken O bizi sevdi ve günahlarımızın bedelini üstlenecek Olan'ı gönderdi. Yemlikteki bebek bu sevginin başlangıcıdır, çarmıh ise tam ölçüsü. Bu kadar sevilen biri, sevmeden duramaz.","q":"Bu hafta kime, karşılık beklemeden sevgi gösterebilirsin?","p":"Rab, beni sevdiğin gibi sevmeyi öğret.","verses":[{"n":"9","l":["Tanrı biricik Oğlu aracılığıyla yaşayalım diye O'nu dünyaya gönderdi, böylece bizi sevdiğini gösterdi."]},{"n":"10","l":["Tanrı'yı biz sevmiş değildik, ama O bizi sevdi ve Oğlu'nu günahlarımızı bağışlatan kurban olarak dünyaya gönderdi. İşte sevgi budur."]},{"n":"11","l":["Sevgili kardeşlerim, Tanrı bizi bu kadar çok sevdiğine göre biz de birbirimizi sevmeye borçluyuz."]}],"wt":"Sevgi","y":"Tanrı'nın sevgisini tek cümleyle anlat."},{"d":"2026-12-21","w":4,"ref":"Luka 2:1, 3-7","cv":"O'nu kundağa sarıp bir yemliğe yatırdı. Çünkü handa yer yoktu.","t":"Handa yer yoktu","m":"Sezar bir buyruk çıkardı ve bütün dünyayı yerinden oynattığını sandı. Oysa Tanrı, bir imparatorun buyruğunu bile kullanarak Mika'nın yedi yüz yıllık sözünü yerine getiriyordu. Evrenin Kralı bir yemliğe yatırıldı, çünkü O'na yer yoktu. Tanrı Oğlu en alçak yere indi ki, hiç kimse O'na yaklaşamayacak kadar aşağıda kalmasın. Sevgi, kendini alçaltmaktan çekinmez.","q":"Bu yoğun günlerde İsa'ya hayatında nasıl yer açabilirsin?","p":"Rab İsa, yüreğimde sana yer var; gel.","verses":[{"n":"1","l":["O günlerde Sezar Avgustus bütün Roma dünyasında bir nüfus sayımının yapılması için buyruk çıkardı."]},{"n":"3","l":["Herkes yazılmak için kendi kentine gitti."]},{"n":"4","l":["Böylece Yusuf da, Davut'un soyundan ve torunlarından olduğu için Celile'nin Nasıra Kenti'nden Yahudiye bölgesine, Davut'un kenti Beytlehem'e gitti."]},{"n":"5","l":["Orada, hamile olan nişanlısı Meryem'le birlikte yazılacaktı."]},{"n":"6-7","l":["Onlar oradayken, Meryem'in doğurma vakti geldi ve ilk oğlunu doğurdu. O'nu kundağa sarıp bir yemliğe yatırdı. Çünkü handa yer yoktu."]}],"wt":"Sevgi","y":"İsa'ya tek cümlelik bir “hoş geldin” yaz."},{"d":"2026-12-22","w":4,"ref":"Luka 2:8-14","cv":"Bugün size, Davut'un kentinde bir Kurtarıcı doğdu. Bu, Rab olan Mesih'tir.","t":"Çobanlara gelen müjde","m":"İlk Noel haberini saraydakiler ya da din bilginleri değil, gece nöbetindeki çobanlar duydu. O dönemde çobanlar toplumun kenarında yaşayan, sözüne pek değer verilmeyen kişilerdi. Melek onlara “Size bir Kurtarıcı doğdu” dedi; yani bu haber kişiseldi. Müjde önce en az beklenenlere geldi, çünkü bu sevinç “bütün halk” içindir. Göğün ezgisi de iki şeyi birleştirir: Tanrı'ya yücelik, yeryüzüne esenlik.","q":"“Size bir Kurtarıcı doğdu.” Bu haber bugün senin için neden iyi bir haber?","p":"En yücelerde Tanrı'ya yücelik olsun!","verses":[{"n":"8","l":["Aynı yörede, sürülerinin yanında nöbet tutarak geceyi kırlarda geçiren çobanlar vardı."]},{"n":"9","l":["Rab'bin bir meleği onlara göründü ve Rab'bin görkemi çevrelerini aydınlattı. Büyük bir korkuya kapıldılar."]},{"n":"10-11","l":["Melek onlara, “Korkmayın!” dedi. “Size, bütün halkı çok sevindirecek bir haber müjdeliyorum: Bugün size, Davut'un kentinde bir Kurtarıcı doğdu. Bu, Rab olan Mesih'tir."]},{"n":"12","l":["İşte size bir işaret: Kundağa sarılmış ve yemlikte yatan bir bebek bulacaksınız.”"]},{"n":"13-14","l":["Birdenbire meleğin yanında, göksel ordulardan oluşan büyük bir topluluk belirdi. Tanrı'yı överek,","“En yücelerde Tanrı'ya yücelik olsun,","Yeryüzünde O'nun hoşnut kaldığı insanlara","Esenlik olsun!” dediler."]}],"wt":"Sevgi","y":"Bu müjdeyi duymasını istediğin biri için dua et (adını yazmadan)."},{"d":"2026-12-23","w":4,"ref":"Luka 2:15-20","cv":"Çobanlar, işitip gördüklerinin tümü için Tanrı'yı yüceltip överek geri döndüler.","t":"Gidip görelim","m":"Çobanlar duyduklarıyla yetinmediler; “Haydi, gidelim, görelim” dediler. Gittiler, buldular ve gördüklerini başkalarına anlattılar. Meryem ise bütün bunları yüreğinde saklayıp derin derin düşündü. İman her iki tepkiyi de içerir: sessizce düşünmek ve sevinçle anlatmak. Çobanlar aynı kırlara, aynı işe döndüler, ama artık aynı insanlar değildiler.","q":"İsa hakkında gördüğün ya da yaşadığın bir şeyi bu hafta kiminle paylaşabilirsin?","p":"Rab, gördüklerimi sevinçle anlatmam için bana cesaret ver.","verses":[{"n":"15","l":["Melekler yanlarından ayrılıp göğe çekildikten sonra çobanlar birbirlerine, “Haydi, Beytlehem'e gidelim, Rab'bin bize bildirdiği bu olayı görelim” dediler."]},{"n":"16","l":["Aceleyle gidip Meryem'le Yusuf'u ve yemlikte yatan bebeği buldular."]},{"n":"17","l":["Onları görünce, çocukla ilgili kendilerine anlatılanları bildirdiler."]},{"n":"18","l":["Bunu duyanların hepsi, çobanların söylediklerine şaşıp kaldılar."]},{"n":"19","l":["Meryem ise bütün bu sözleri derin derin düşünerek yüreğinde saklıyordu."]},{"n":"20","l":["Çobanlar, işitip gördüklerinin tümü için Tanrı'yı yüceltip överek geri döndüler. Her şeyi, kendilerine anlatıldığı gibi bulmuşlardı."]}],"wt":"Sevgi","y":"Bu Advent'te Tanrı'nın sana gösterdiği bir şeyi tek cümleyle anlat."},{"d":"2026-12-24","w":4,"ref":"Yuhanna 1:1-5, 14","cv":"Işık karanlıkta parlar. Karanlık onu alt edemedi.","t":"Söz insan oldu","m":"Yuhanna, Noel'i bir ahırdan değil, sonsuzluktan başlatır: Başlangıçta Söz vardı. Her şeyi yaratan Söz, yarattığı dünyaya bir insan olarak girdi. İlk gün Yeşaya'dan okuduğumuz ışık işte budur: karanlıkta parlayan ve karanlığın alt edemediği ışık. Tanrı kendini bize uzaktan anlatmakla yetinmedi; aramızda yaşadı. Bu gece beklediğimiz şey bir duygu ya da bir gelenek değil, bir kişidir: İsa Mesih.","q":"Bu Advent boyunca İsa hakkında yeniden fark ettiğin şey nedir?","p":"Rab İsa, ışığın karanlığımda parlasın.","verses":[{"n":"1","l":["Başlangıçta Söz vardı. Söz Tanrı'yla birlikteydi ve Söz Tanrı'ydı."]},{"n":"2","l":["Başlangıçta O, Tanrı'yla birlikteydi."]},{"n":"3","l":["Her şey O'nun aracılığıyla var oldu, var olan hiçbir şey O'nsuz olmadı."]},{"n":"4","l":["Yaşam O'ndaydı ve yaşam insanların ışığıydı."]},{"n":"5","l":["Işık karanlıkta parlar. Karanlık onu alt edemedi."]},{"n":"14","l":["Söz, insan olup aramızda yaşadı. O'nun yüceliğini –Baba'dan gelen, lütuf ve gerçekle dolu biricik Oğul'un yüceliğini– gördük."]}],"wt":"Sevgi","y":"İsa senin için kim? Tek cümleyle yaz."},{"d":"2026-12-25","w":5,"ref":"Matta 2:1-2, 9-11","cv":"Yıldızı gördüklerinde olağanüstü bir sevinç duydular.","t":"Yıldızın durduğu yer","m":"Uzak ülkelerden gelen yıldızbilimciler bir ışığı izleyerek İsa'yı buldular. Böylece İbrahim'e verilen söz gerçekleşmeye başladı: yeryüzündeki bütün halklar O'na geliyor. Yıldızı gördüklerinde olağanüstü bir sevinç duydular; çünkü arayışları bir yere değil, bir kişiye vardı. Sonra yere kapanıp tapındılar ve en değerli şeylerini O'na sundular. Günlerdir yaktığımız her küçük ışık da aynı yeri gösteriyor: Kurtarıcımız doğdu.","q":"Bu Noel'de İsa'ya armağan olarak ne sunmak istersin?","p":"Rab İsa, geldiğin için sana şükrediyorum; hayatımı sana sunuyorum.","verses":[{"n":"1-2","l":["İsa'nın Kral Hirodes devrinde Yahudiye'nin Beytlehem Kenti'nde doğmasından sonra bazı yıldızbilimciler doğudan Yeruşalim'e gelip şöyle dediler: “Yahudiler'in Kralı olarak doğan çocuk nerede? Doğuda O'nun yıldızını gördük ve O'na tapınmaya geldik.”"]},{"n":"9","l":["Yıldızbilimciler, kralı dinledikten sonra yola çıktılar. Doğuda görmüş oldukları yıldız onlara yol gösteriyordu, çocuğun bulunduğu yerin üzerine varınca durdu."]},{"n":"10","l":["Yıldızı gördüklerinde olağanüstü bir sevinç duydular."]},{"n":"11","l":["Eve girip çocuğu annesi Meryem'le birlikte görünce yere kapanarak O'na tapındılar. Hazinelerini açıp O'na armağan olarak altın, günnük ve mür sundular."]}],"wt":"Noel","y":"Doğan Kral'a tek cümlelik armağanını yaz."}];
+const DOW=["Paz","Pzt","Sal","Çar","Per","Cum","Cmt"];
+const MON={10:"Kasım",11:"Aralık"};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let mine=store.get("isik-mine",{});      // {date:{text,pub}}
+let amins=store.get("isik-amin",{});
+let fmt="story";
+const pv=new URLSearchParams(location.search).get("gun");
+let today=/^2026-1[12]-\d\d$/.test(pv||"")?pv:new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/Istanbul"}).format(new Date()), sel=null;
+const idxOf=d=>DAYS.findIndex(x=>x.d===d);
+const todayIdx=()=>{ if(today<DAYS[0].d) return -1; let i=-1; DAYS.forEach((x,k)=>{if(x.d<=today)i=k}); return i; };
+
+/* ---------- sky ---------- */
+function rng(seed){let s=seed>>>0;return()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+const cv=$("#cv"),cx=cv.getContext("2d");let Wd=0,Hd=0,stars=[],flash=null;
+let remote=null;
+const api=(p,b)=>fetch("/api/isik"+p,b?{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(b)}:{}).then(async r=>({ok:r.ok,status:r.status,j:await r.json().catch(()=>({}))}));
+function buildStars(){
+  stars=[];const n=todayIdx(),own=new Set(Object.values(mine).map(m=>m.id).filter(Boolean));
+  if(remote)for(const [id,d,t,a] of remote.s){const i=idxOf(d);if(i<0||i>n||own.has(id))continue;const r=rng(id*2654435761);
+    stars.push({x:.03+r()*.94,y:.06+r()*.7,s:.7+r()*1.3,ph:r()*6.28,day:i,line:t,am:a,id:id})}
+  const local=Object.keys(mine).filter(d=>idxOf(d)>=0&&idxOf(d)<=n);
+  $("#cnt").textContent=remote?Math.max(remote.n,local.length)+local.filter(d=>!mine[d].id).length:local.length;
+}
+async function pull(){try{const r=await api("");if(r.ok&&Array.isArray(r.j.s)){remote=r.j;buildStars();if(still)draw(0)}}catch(e){}}
+function myPos(i){const t=i/26;return{x:.09+.62*t+Math.sin(t*9)*.03,y:.74-.5*Math.pow(t,1.1)+Math.cos(t*7)*.035}}
+const mix=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t));
+function draw(ts){
+  const n=todayIdx(),b=Math.max(0,n)/26,t=(ts||0)/1000;
+  const g=cx.createLinearGradient(0,0,0,Hd);
+  g.addColorStop(0,`rgb(${mix([5,7,20],[16,28,84],b)})`);g.addColorStop(1,`rgb(${mix([10,14,36],[44,70,150],b)})`);
+  cx.fillStyle=g;cx.fillRect(0,0,Wd,Hd);
+  const hg=cx.createRadialGradient(Wd*.72,Hd*1.05,0,Wd*.72,Hd*1.05,Hd*.9);
+  hg.addColorStop(0,`rgba(245,138,51,${.06+.3*b})`);hg.addColorStop(1,"rgba(245,138,51,0)");cx.fillStyle=hg;cx.fillRect(0,0,Wd,Hd);
+  // faint fixed dust
+  const r=rng(7);cx.fillStyle="rgba(255,255,255,.28)";for(let i=0;i<70;i++){cx.fillRect(r()*Wd,r()*Hd*.8,1,1)}
+  // community stars
+  for(const s of stars){const tw=.55+.45*Math.sin(t*1.3+s.ph);cx.globalAlpha=.45+.5*tw;cx.fillStyle="#DCE9FF";cx.beginPath();cx.arc(s.x*Wd,s.y*Hd,s.s,0,6.28);cx.fill()}
+  cx.globalAlpha=1;
+  // my constellation
+  const lit=DAYS.map((d,i)=>mine[d.d]&&i<=n?i:-1).filter(i=>i>=0);
+  cx.strokeStyle="rgba(255,196,107,.45)";cx.lineWidth=1;cx.beginPath();
+  lit.forEach((i,k)=>{const p=myPos(i);k?cx.lineTo(p.x*Wd,p.y*Hd):cx.moveTo(p.x*Wd,p.y*Hd)});cx.stroke();
+  for(const i of lit){const p=myPos(i),X=p.x*Wd,Y=p.y*Hd;let R=20+2*Math.sin(t*2+i);if(flash&&flash.i===i){const a=Math.min(1,(t-flash.t)/1.6);R=20+60*(1-a)}
+    const gg=cx.createRadialGradient(X,Y,0,X,Y,R);gg.addColorStop(0,"rgba(255,227,166,.95)");gg.addColorStop(1,"rgba(255,196,107,0)");cx.fillStyle=gg;cx.beginPath();cx.arc(X,Y,R,0,6.28);cx.fill();
+    cx.fillStyle="#FFF4D6";cx.beginPath();const L=8,w=1.6;cx.moveTo(X,Y-L);cx.quadraticCurveTo(X+w,Y-w,X+L,Y);cx.quadraticCurveTo(X+w,Y+w,X,Y+L);cx.quadraticCurveTo(X-w,Y+w,X-L,Y);cx.quadraticCurveTo(X-w,Y-w,X,Y-L);cx.fill()}
+  // Bethlehem star on Dec 25
+  if(n>=26){const X=Wd*.76,Y=Hd*.2,pu=1+.06*Math.sin(t*1.5);const gg=cx.createRadialGradient(X,Y,0,X,Y,90*pu);gg.addColorStop(0,"rgba(255,244,214,.95)");gg.addColorStop(.25,"rgba(255,196,107,.4)");gg.addColorStop(1,"rgba(255,196,107,0)");cx.fillStyle=gg;cx.beginPath();cx.arc(X,Y,90*pu,0,6.28);cx.fill();
+    cx.fillStyle="#FFF8E6";cx.beginPath();const L=46*pu,w=4;cx.moveTo(X,Y-L);cx.quadraticCurveTo(X+w,Y-w,X+L*.6,Y);cx.quadraticCurveTo(X+w,Y+w,X,Y+L*1.5);cx.quadraticCurveTo(X-w,Y+w,X-L*.6,Y);cx.quadraticCurveTo(X-w,Y-w,X,Y-L);cx.fill()}
+  // hills + small town
+  cx.fillStyle="#050816";cx.beginPath();cx.moveTo(0,Hd);cx.lineTo(0,Hd*.9);cx.bezierCurveTo(Wd*.25,Hd*.8,Wd*.45,Hd*.95,Wd*.62,Hd*.88);cx.bezierCurveTo(Wd*.78,Hd*.82,Wd*.9,Hd*.9,Wd,Hd*.86);cx.lineTo(Wd,Hd);cx.fill();
+  const bx=Wd*.7,by=Hd*.862;[[0,14,12],[13,10,16],[30,16,10],[41,9,14]].forEach(([o,w,h])=>cx.fillRect(bx+o,by-h,w,h+8));
+  cx.fillStyle=`rgba(255,196,107,${.5+.4*b})`;[[4,6],[18,8],[35,5],[45,7]].forEach(([o,h])=>cx.fillRect(bx+o,by-h,2,3));
+}
+function loop(ts){draw(ts);raf=requestAnimationFrame(loop)}
+let raf=0;const still=matchMedia("(prefers-reduced-motion: reduce)").matches;
+function size(){const r=cv.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);Wd=r.width;Hd=r.height;cv.width=Wd*d;cv.height=Hd*d;cx.setTransform(d,0,0,d,0,0);if(still)draw(0)}
+addEventListener("resize",size);
+function hit(x,y){const n=todayIdx();let best=null,bd=26;
+  DAYS.forEach((d,i)=>{if(mine[d.d]&&i<=n){const p=myPos(i),q=Math.hypot(p.x*Wd-x,p.y*Hd-y);if(q<bd){bd=q;best={mine:true,day:i,line:mine[d.d].text,pub:mine[d.d].pub}}}});
+  if(best)return best;bd=20;
+  for(const s of stars){const q=Math.hypot(s.x*Wd-x,s.y*Hd-y);if(q<bd){bd=q;best=s}}
+  return best}
+function showPop(best,x,y){const pop=$("#pop");if(!best){pop.hidden=true;return}
+  if(best.mine){pop.innerHTML=`<q>${esc(best.line)}</q><div class="row"><span>Senin ışığın · ${DAYS[best.day].ref}</span><span>${best.pub?"isimsiz paylaşıldı":"yalnızca sende"}</span></div>`}
+  else{const on=!!amins[best.id];
+    pop.innerHTML=`<q>${esc(best.line)}</q><div class="row"><span>${DAYS[best.day].ref}</span><button class="amin" aria-pressed="${on}">Amin · <span>${best.am+(on?1:0)}</span></button></div>`;
+    pop.querySelector(".amin").onclick=ev=>{amins[best.id]=!amins[best.id];api("/amin",{id:best.id,on:!!amins[best.id]}).catch(()=>{});store.set("isik-amin",amins);const o=!!amins[best.id];ev.currentTarget.setAttribute("aria-pressed",o);ev.currentTarget.querySelector("span").textContent=best.am+(o?1:0)}}
+  pop.hidden=false;pop.style.left=Math.max(12,Math.min(Wd-272,x-130))+"px";pop.style.top=Math.max(8,Math.min(Hd-120,y+16))+"px"}
+const xy=e=>{const r=cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top]};
+cv.addEventListener("click",e=>{const[x,y]=xy(e);showPop(hit(x,y),x,y)});
+let hov=null;cv.addEventListener("mousemove",e=>{const[x,y]=xy(e),h=hit(x,y);cv.style.cursor=h?"pointer":"default";const k=h?(h.mine?"m"+h.day:h.id):null;if(k!==hov){hov=k;if(h)showPop(h,x,y);else if(!$("#pop").matches(":hover"))$("#pop").hidden=true}});
+
+/* ---------- days strip ---------- */
+function renderDays(){
+  const n=todayIdx();
+  $("#days").innerHTML=DAYS.map((d,i)=>{const dt=new Date(d.d+"T12:00:00");return `<button class="day${mine[d.d]?" done":""}${i===sel?" sel":""}${dt.getDay()===0?" sunday":""}" data-i="${i}" ${i>n?"disabled":""} aria-label="${dt.getDate()} ${MON[dt.getMonth()]}${i>n?" (henüz açılmadı)":""}"><small>${DOW[dt.getDay()]}</small><b>${dt.getDate()}</b><i></i></button>`}).join("");
+  $("#days").querySelectorAll(".day").forEach(b=>b.onclick=()=>{sel=+b.dataset.i;renderDays();renderMain()});
+  const s=$("#days .sel");if(s)s.scrollIntoView({inline:"center",block:"nearest"});
+}
+
+/* ---------- main ---------- */
+function clean(t){ // same checks the server will repeat
+  t=t.trim().replace(/\s+/g," ");
+  if(t.length<2) return {err:"Bir cümle yaz."};
+  if(/(https?:|www\.|\.com|\.net|\.org|@|\d{7,})/i.test(t)) return {err:"Bağlantı, e-posta ya da telefon numarası yazılamaz."};
+  return {t};
+}
+function renderMain(){
+  const m=$("#main"),n=todayIdx();
+  if(n<0){const days=Math.ceil((new Date(DAYS[0].d)-new Date(today))/864e5);m.innerHTML=`<div class="locked"><b>${days}</b> gün sonra başlıyor<br>İlk ışık 29 Kasım Pazar günü yanacak.</div>`;return}
+  const d=DAYS[sel],dt=new Date(d.d+"T12:00:00"),me=mine[d.d];
+  const verses=d.verses.map(v=>`<p>${v.l.length>1?v.l.map((x,k)=>`<span class="ln">${k?"":`<sup>${v.n}</sup>`}${esc(x)}</span>`).join(""):`<sup>${v.n}</sup>`+esc(v.l[0])}</p>`).join("");
+  m.innerHTML=`
+  <header>
+    <div class="meta"><span class="chip">${d.w<5?d.w+". hafta · ":""}${d.wt}</span><span>${dt.getDate()} ${MON[dt.getMonth()]} · ${sel+1}. gün</span></div>
+    <h2>${esc(d.t)}</h2>
+  </header>
+  <section><div class="step"><span><b>1</b> · Söz</span><button class="ghost" id="listen" hidden>Dinle</button></div>
+    <div class="scripture">${verses}<cite>${d.ref}</cite></div></section>
+  <section><div class="step"><span><b>2</b> · Düşünce</span></div>
+    <p class="medit">${esc(d.m)}</p></section>
+  <section><div class="step"><span><b>3</b> · Düşün ve yaz</span></div>
+    <div class="answer">
+      <p class="think"><span>Düşün</span>${esc(d.q)}</p>
+      <p class="question">${esc(d.y)}</p>
+      ${me?`<p class="mine">“${esc(me.text)}”</p><div class="under"><span>${me.pub?"Gökyüzünde isimsiz paylaşıldı.":"Yalnızca sende saklı."}</span><button class="ghost" id="edit">Değiştir</button></div>`:
+      `<textarea id="ans" maxlength="90" placeholder="Bir cümle yeter…" aria-label="Cevabın"></textarea>
+      <div class="under"><div class="vis" role="radiogroup" aria-label="Görünürlük">
+        <label><input type="radio" name="vis" id="vis-pub" value="1" checked> Gökyüzünde isimsiz paylaş</label>
+        <label><input type="radio" name="vis" id="vis-priv" value="0"> Yalnızca ben göreyim</label></div><span id="left">90</span></div>
+      <p class="err" id="err" hidden></p>
+      <button class="cta" id="light">Işığımı yak</button>`}
+    </div></section>
+  <section><div class="step"><span><b>4</b> · Dua</span></div>
+    <p class="prayer">${esc(d.p)}</p></section>
+  ${me?`<section><div class="step"><span>Paylaş</span><span class="seg"><button data-f="story" aria-pressed="${fmt==="story"}">Hikâye 9:16</button><button data-f="square" aria-pressed="${fmt==="square"}">Kare 1:1</button></span></div>
+    <div class="cardbox"><img id="card" alt="Bugünkü ayet ve cümlenle paylaşım kartı">
+      <div class="btns"><button class="cta" id="share">Paylaş</button><button class="btn2" id="save">Görseli kaydet</button></div>
+      <p class="note" id="sharenote">Telefonda “Paylaş” Instagram, Threads ve WhatsApp'ı açar. Bilgisayarda görsel kaydedilir.</p></div></section>`:""}`;
+  const ans=$("#ans");
+  if(ans){ans.oninput=()=>$("#left").textContent=90-ans.value.length;
+    $("#light").onclick=async()=>{const c=clean(ans.value),er=$("#err");if(c.err){er.textContent=c.err;er.hidden=false;return}
+      const pub=$("#vis-pub").checked,bt=$("#light");bt.disabled=true;let rec={text:c.t,pub};
+      try{const r=await api("",{d:d.d,t:pub?c.t:"",p:pub?1:0});
+        if(r.status===422||r.status===429){er.textContent=r.j.err||"Gönderilemedi.";er.hidden=false;bt.disabled=false;return}
+        if(r.ok&&r.j.id){rec.id=r.j.id;rec.k=r.j.k;if(remote)remote.n++}}catch(e){}
+      mine[d.d]=rec;store.set("isik-mine",mine);buildStars();renderDays();renderMain();
+      flash={i:sel,t:performance.now()/1000};if(still)draw(0);$("#sky").scrollIntoView({behavior:still?"auto":"smooth"});}}
+  const ed=$("#edit");if(ed)ed.onclick=()=>{if(me.id){api("/sil",{id:me.id,k:me.k}).catch(()=>{});if(remote)remote.n=Math.max(0,remote.n-1)}delete mine[d.d];store.set("isik-mine",mine);buildStars();renderDays();renderMain()};
+  if(me){m.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{fmt=b.dataset.f;renderMain()});makeCard(d,me.text).then(u=>{const im=$("#card");if(im)im.src=u});
+    $("#share").onclick=()=>share(d,me.text);$("#save").onclick=()=>save(d,me.text);}
+  const ls=$("#listen");if("speechSynthesis" in window){ls.hidden=false;ls.onclick=()=>{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(d.verses.map(v=>v.l.join(" ")).join(" ")+" "+d.m);u.lang="tr-TR";u.rate=.92;speechSynthesis.speak(u)}}
+}
+
+/* ---------- share card ---------- */
+function wrapText(c,text,maxW){const out=[];let line="";for(const w of text.split(" ")){const t=line?line+" "+w:w;if(c.measureText(t).width>maxW&&line){out.push(line);line=w}else line=t}if(line)out.push(line);return out}
+function star4(x,X,Y,L,w){x.beginPath();x.moveTo(X,Y-L);x.quadraticCurveTo(X+w,Y-w,X+L*.62,Y);x.quadraticCurveTo(X+w,Y+w,X,Y+L*1.35);x.quadraticCurveTo(X-w,Y+w,X-L*.62,Y);x.quadraticCurveTo(X-w,Y-w,X,Y-L);x.fill()}
+async function makeCard(d,text){
+  try{await document.fonts.load('700 60px "Bricolage Grotesque"');await document.fonts.load('400 40px "Source Serif 4"');await document.fonts.load('italic 400 40px "Source Serif 4"');await document.fonts.load('600 30px Inter')}catch(e){}
+  const W=1080,st=fmt==="story",H=st?1920:1080,c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d"),di=idxOf(d.d);
+  // night to first light
+  const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,"#050818");g.addColorStop(.45,"#0F1A4D");g.addColorStop(.8,"#27408F");g.addColorStop(1,"#5E5C9E");x.fillStyle=g;x.fillRect(0,0,W,H);
+  const hg=x.createRadialGradient(W*.5,H,0,W*.5,H,H*.55);hg.addColorStop(0,"rgba(255,170,77,.55)");hg.addColorStop(.5,"rgba(245,138,51,.16)");hg.addColorStop(1,"rgba(245,138,51,0)");x.fillStyle=hg;x.fillRect(0,0,W,H);
+  const r=rng(di*17+3);for(let i=0;i<190;i++){const sx=r()*W,sy=r()*H*.78,ss=.7+r()*2.1;x.globalAlpha=.25+r()*.75;x.fillStyle=r()>.85?"#FFE3A6":"#DCE9FF";x.beginPath();x.arc(sx,sy,ss,0,6.28);x.fill()}x.globalAlpha=1;
+  // the star and its soft column of light
+  const SX=W/2,SY=st?300:128,SR=st?210:120;
+  const beam=x.createLinearGradient(0,SY,0,SY+(st?900:520));beam.addColorStop(0,"rgba(255,227,166,.20)");beam.addColorStop(1,"rgba(255,227,166,0)");x.fillStyle=beam;x.beginPath();x.moveTo(SX-6,SY);x.lineTo(SX+6,SY);x.lineTo(SX+(st?150:90),SY+(st?900:520));x.lineTo(SX-(st?150:90),SY+(st?900:520));x.fill();
+  const sg=x.createRadialGradient(SX,SY,0,SX,SY,SR);sg.addColorStop(0,"rgba(255,248,230,1)");sg.addColorStop(.16,"rgba(255,214,140,.55)");sg.addColorStop(.5,"rgba(255,196,107,.14)");sg.addColorStop(1,"rgba(255,196,107,0)");x.fillStyle=sg;x.beginPath();x.arc(SX,SY,SR,0,6.28);x.fill();
+  x.fillStyle="#FFF8E6";star4(x,SX,SY,st?74:44,st?6:4);
+  // land: hills and the little town with lit windows
+  const base=H-(st?290:170);
+  x.fillStyle="#0A0F2A";x.beginPath();x.moveTo(0,H);x.lineTo(0,base+50);x.bezierCurveTo(W*.2,base-30,W*.38,base+70,W*.55,base+26);x.bezierCurveTo(W*.72,base-16,W*.88,base+40,W,base+6);x.lineTo(W,H);x.fill();
+  x.fillStyle="#060A1F";x.beginPath();x.moveTo(0,H);x.lineTo(0,base+120);x.bezierCurveTo(W*.3,base+60,W*.6,base+150,W,base+90);x.lineTo(W,H);x.fill();
+  const tx=W*.5-120,ty=base+34,k=st?1:.8;x.fillStyle="#0A0F2A";
+  const hs=[[0,44,40],[40,34,58],[78,52,36],[134,30,66],[168,46,44],[210,34,30]];hs.forEach(([o,w,h])=>x.fillRect(tx+o*k,ty-h*k,w*k,h*k+30));
+  x.beginPath();x.arc(tx+149*k,ty-66*k,15*k,Math.PI,0);x.fill();
+  x.fillStyle="#FFC46B";[[12,22],[52,38],[58,18],[96,20],[144,44],[182,24],[222,14]].forEach(([o,h])=>x.fillRect(tx+o*k,ty-h*k,5*k,7*k));
+  // text
+  x.textAlign="center";
+  const sp=s=>s.split("").join(" ");
+  let y=st?610:268;x.fillStyle="#FFC46B";x.font="600 28px Inter, sans-serif";x.fillText(sp(`ADVENT · ${di+1}. GÜN · ${d.wt.toLocaleUpperCase("tr-TR")}`),W/2,y);
+  let vf=st?44:36;x.font=`400 ${vf}px "Source Serif 4", Georgia, serif`;let vl=wrapText(x,d.cv,W-220);
+  if(vl.length>(st?5:3)){vf-=6;x.font=`400 ${vf}px "Source Serif 4", Georgia, serif`;vl=wrapText(x,d.cv,W-200)}
+  x.fillStyle="#EEF1FA";y+=st?84:58;for(const l of vl){x.fillText(l,W/2,y);y+=vf*1.42}
+  x.fillStyle="#A9B4D8";x.font="500 28px Inter, sans-serif";x.fillText(d.ref,W/2,y+2);
+  y+=st?70:44;x.fillStyle="#FFC46B";star4(x,W/2,y,13,2);x.strokeStyle="rgba(255,196,107,.5)";x.lineWidth=1.5;x.beginPath();x.moveTo(W/2-110,y+2);x.lineTo(W/2-26,y+2);x.moveTo(W/2+26,y+2);x.lineTo(W/2+110,y+2);x.stroke();
+  // my sentence, centred in the room that is left
+  const dotsY=base-(st?70:34),top=y+(st?60:34),room=dotsY-(st?60:30)-top;
+  let fs=st?78:58,lines;const q="“"+text+"”";
+  do{x.font=`700 ${fs}px "Bricolage Grotesque", sans-serif`;lines=wrapText(x,q,W-170);fs-=4}while(lines.length*(fs+4)*1.18>room&&fs>30);fs+=4;
+  let ly=top+(room-lines.length*fs*1.18)/2+fs*.85;x.fillStyle="#FFE3A6";x.shadowColor="rgba(255,196,107,.35)";x.shadowBlur=24;for(const l of lines){x.fillText(l,W/2,ly);ly+=fs*1.18}x.shadowBlur=0;
+  // 27 lights: how far we have come
+  const gap=st?30:28,x0=W/2-gap*13;for(let i=0;i<27;i++){const on=i<=di,cur=i===di;x.fillStyle=on?"#FFD98A":"rgba(220,233,255,.22)";if(cur){x.shadowColor="#FFD98A";x.shadowBlur=18}x.beginPath();x.arc(x0+i*gap,dotsY,cur?7:on?4:3,0,6.28);x.fill();x.shadowBlur=0}
+  // footer on the dark land
+  x.fillStyle="#EEF1FA";x.font='700 34px "Bricolage Grotesque", sans-serif';x.fillText("Işık Işık · Advent 2026",W/2,H-(st?118:66));
+  x.fillStyle="#A9B4D8";x.font="500 26px Inter, sans-serif";x.fillText("Antalya Uluslara Işık Kilisesi · uluslaraisik.org",W/2,H-(st?72:30));
+  return c.toDataURL("image/png");
+}
+async function toFile(d,text){const u=await makeCard(d,text);const b=await (await fetch(u)).blob();return new File([b],`isik-isik-${d.d}.png`,{type:"image/png"})}
+async function share(d,text){const note=$("#sharenote");try{const f=await toFile(d,text);if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text:`${d.ref} · uluslaraisik.org`});return}}catch(e){if(e&&e.name==="AbortError")return}
+  note.textContent="Paylaşım penceresi açılamadı. Görseli kaydedip paylaşabilirsin.";}
+async function save(d,text){const u=await makeCard(d,text);const a=document.createElement("a");a.href=u;a.download=`isik-isik-${d.d}.png`;document.body.appendChild(a);a.click();a.remove();
+  $("#sharenote").textContent="Kaydedilmediyse görsele basılı tut (bilgisayarda sağ tıkla) ve kaydet.";}
+
+function boot(){sel=Math.max(0,todayIdx());$("#pop").hidden=true;buildStars();renderDays();renderMain();if(still)draw(0)}
+size();boot();if(!still)raf=requestAnimationFrame(loop);
+pull();setInterval(()=>{if(!document.hidden)pull()},60000);
+</script>
+</body>
+</html>
