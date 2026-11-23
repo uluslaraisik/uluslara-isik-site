@@ -17,7 +17,7 @@ const c = want ? COL.find(x => String(x.n) === String(want))
 if (!c) { console.log("No column for", want || today); process.exit(0); }
 const url = `https://uluslaraisik.org/yazi/${c.n}`;
 const subject = `${c.t} · Haftalık Yazı ${c.n}`;
-const H = {Authorization: `Token ${KEY}`, "Content-Type": "application/json"};
+const H = {Authorization: `Token ${KEY}`, "Content-Type": "application/json", "X-Buttondown-Live-Dangerously": "true"};
 const prev = await (await fetch("https://api.buttondown.com/v1/emails?page_size=100", {headers: H})).json();
 const ex = (prev.results || []).find(e => e.subject === subject);
 if (ex && ex.status !== "draft") { console.log("Already sent:", subject, ex.status); process.exit(0); }
