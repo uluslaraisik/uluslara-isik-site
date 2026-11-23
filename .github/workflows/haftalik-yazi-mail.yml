@@ -1,7 +1,13 @@
 name: Haftalık yazı e-postası
 on:
   schedule:
-    - cron: "0 5 * * 1"   # Monday 08:00 Europe/Istanbul
+    # GitHub bazen zamanlanmış çalıştırmayı atlıyor; yedek saatler eklendi.
+    # Aynı konu zaten gönderildiyse betik tekrar göndermez.
+    - cron: "7 5 * * 1"    # Pzt 08:07 TRT
+    - cron: "23 8 * * 1"   # Pzt 11:23 TRT (yedek)
+    - cron: "41 12 * * 1"  # Pzt 15:41 TRT (yedek)
+    - cron: "17 6 * * 2"   # Sal 09:17 TRT (yedek)
+    - cron: "33 7 * * 3"   # Çar 10:33 TRT (yedek)
   workflow_dispatch:
     inputs:
       column_no:

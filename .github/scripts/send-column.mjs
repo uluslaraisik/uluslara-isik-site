@@ -10,7 +10,10 @@ const M = {Ocak:1,Şubat:2,Mart:3,Nisan:4,Mayıs:5,Haziran:6,Temmuz:7,Ağustos:8
 const iso = c => { const [d, m, y] = c.d.split(" "); return `${y}-${String(M[m]).padStart(2,"0")}-${String(d).padStart(2,"0")}`; };
 const today = new Intl.DateTimeFormat("en-CA", {timeZone: "Europe/Istanbul"}).format(new Date());
 const want = process.env.COLUMN_NO;
-const c = want ? COL.find(x => String(x.n) === String(want)) : COL.find(x => iso(x) === today);
+// Bugün veya son 6 gün içinde yayınlanmış en yeni yazı (yedek saatlerde de bulunur)
+const ago = d => (Date.parse(today) - Date.parse(d)) / 864e5;
+const c = want ? COL.find(x => String(x.n) === String(want))
+  : COL.filter(x => { const a = ago(iso(x)); return a >= 0 && a <= 6; }).sort((a, b) => b.n - a.n)[0];
 if (!c) { console.log("No column for", want || today); process.exit(0); }
 const url = `https://uluslaraisik.org/yazi/${c.n}`;
 const subject = `${c.t} · Haftalık Yazı ${c.n}`;
